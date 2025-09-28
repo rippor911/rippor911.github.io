@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/img/swap_Logisim.png">
 <meta property="article:published_time" content="2025-09-26T02:50:42.007Z">
-<meta property="article:modified_time" content="2025-09-28T03:57:35.523Z">
+<meta property="article:modified_time" content="2025-09-28T14:10:26.952Z">
 <meta property="article:author" content="rippor">
 <meta property="article:tag" content="编程">
 <meta name="twitter:card" content="summary_large_image">
@@ -325,7 +325,7 @@ mjx-container[display="true"] + br {
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.7k 字
+          2.8k 字
         
       </span>
     
@@ -336,7 +336,7 @@ mjx-container[display="true"] + br {
         
         
         
-          23 分钟
+          24 分钟
         
       </span>
     
@@ -761,6 +761,7 @@ mjx-container[display="true"] + br {
 <li>两种方式的区别仅在于谁管理数据</li>
 </ol>
 <h3 id="实战心得"><a href="#实战心得" class="headerlink" title="实战心得"></a>实战心得</h3><h4 id="省流"><a href="#省流" class="headerlink" title="省流"></a>省流</h4><p>省流：笔者在实战中犯的错误主要和内存相关，如没有注意可使用的内存区是哪些，<code>$sp</code> 回退混乱和错位（如<code>sw</code> 但没保证地址能被 4 整除），以及越界的问题</p>
+<p>建议对包含 <code>sp</code> 在内的指针初始化，避免指向不明区域</p>
 <table>
 <thead>
 <tr>
