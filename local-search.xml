@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>VerilogPre</title>
+    <link href="/2025/09/28/VerilogPre/"/>
+    <url>/2025/09/28/VerilogPre/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    <categories>
+      
+      <category>CO</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>LogisimPre</title>
     <link href="/2025/09/28/LogisimPre/"/>
     <url>/2025/09/28/LogisimPre/</url>
@@ -14,6 +33,8 @@
     <categories>
       
       <category>电路</category>
+      
+      <category>CO</category>
       
     </categories>
     
@@ -32,7 +53,7 @@
     
     <categories>
       
-      <category>汇编</category>
+      <category>CO</category>
       
     </categories>
     
