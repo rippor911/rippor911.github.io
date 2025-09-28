@@ -21,20 +21,20 @@
   
     <meta name="description" content="基础知识寄存器通用寄存器   register name usage    $0 $zero 常量 0   $1 $at 保留给汇编器使用的临时变量   $2-$3 $v0-$v1 函数调用返回值   $4-$7 $a0-$a3 函数调用参数   $8-$15 $t0-$t7 临时变量   $16-$23 $s0-$s7 需要保存的变量   $24-$25 $t8-$t9 临时变量   $26-$">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MIPS">
-<meta property="og:url" content="http://example.com/2025/09/26/MIPS%E6%B1%87%E7%BC%96/index.html">
+<meta property="og:title" content="MIPSPre">
+<meta property="og:url" content="http://example.com/2025/09/26/MIPS%E6%B1%87%E7%BC%96pre/index.html">
 <meta property="og:site_name" content="Adventure">
 <meta property="og:description" content="基础知识寄存器通用寄存器   register name usage    $0 $zero 常量 0   $1 $at 保留给汇编器使用的临时变量   $2-$3 $v0-$v1 函数调用返回值   $4-$7 $a0-$a3 函数调用参数   $8-$15 $t0-$t7 临时变量   $16-$23 $s0-$s7 需要保存的变量   $24-$25 $t8-$t9 临时变量   $26-$">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-09-26T02:50:42.007Z">
-<meta property="article:modified_time" content="2025-09-28T02:39:38.917Z">
+<meta property="article:modified_time" content="2025-09-28T03:06:45.406Z">
 <meta property="article:author" content="rippor">
 <meta property="article:tag" content="编程">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>MIPS - Adventure</title>
+  <title>MIPSPre - Adventure</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -188,7 +188,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="MIPS"></span>
+            <span id="subtitle" data-typed-text="MIPSPre"></span>
           
         </div>
 
@@ -259,7 +259,7 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">MIPS</h1>
+            <h1 id="seo-header">MIPSPre</h1>
             
             
               <div class="markdown-body">
@@ -333,7 +333,7 @@
 <td>返回地址</td>
 </tr>
 </tbody></table>
-<p>&#x3D;&#x3D;一般不用$1,对$0的赋值无效&#x3D;&#x3D;</p>
+<p><strong>一般不用$1,对$0的赋值无效</strong></p>
 <h4 id="特殊寄存器"><a href="#特殊寄存器" class="headerlink" title="特殊寄存器"></a>特殊寄存器</h4><ul>
 <li>PC：它用于存储当前 CPU 正在执行的指令在内存中的地址。(值不能用常规的指令进行取值和赋值)</li>
 <li>HI：存放每次乘法结果的高 32 位，也被用来存放除法结果的余数。</li>
@@ -349,7 +349,7 @@
 <p>指令名 操作数 1, 操作数 2, 操作数 3</p>
 <p>存取指令格式：</p>
 <p>指令名 操作数 1, 操作数 3(操作数 2)</p>
-<p>&#x3D;&#x3D;一般来说，在 MIPS 指令集中，指令分为三种格式：R 型、I 型和 J 型。&#x3D;&#x3D;</p>
+<p><strong>一般来说，在 MIPS 指令集中，指令分为三种格式：R 型、I 型和 J 型。</strong></p>
 <ul>
 <li>R 型指令：操作数最多，一般用于运算指令</li>
 <li>I 型指令：有 16 位的立即数或偏移</li>
@@ -530,8 +530,7 @@
 <li>用 <code>$sp</code> 自增依次退栈并把参数还原到相应的寄存器（或内存）中，最后读取返回地址到 <code>$ra</code></li>
 <li><code>jr $ra</code> 返回到调用处</li>
 </ol>
-<p>&#x3D;&#x3D;注意&#x3D;&#x3D;</p>
-<ol>
+<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><ol>
 <li><code>sw</code> 要保证地址能被 4 整除，所以保存参数一定要符合</li>
 <li>两种方式的区别仅在于谁管理数据</li>
 </ol>
@@ -588,8 +587,7 @@
 <td><code>$sp</code>寄存器管理</td>
 </tr>
 </tbody></table>
-<p>&#x3D;&#x3D;注意&#x3D;&#x3D;</p>
-<p>如果选择的是 <code>Compact, Data at Address 0</code> 模式，则程序从 0x00003000 开始存储， data 申请的数据空间只有 12288 Byte</p>
+<h4 id="提醒"><a href="#提醒" class="headerlink" title="提醒"></a>提醒</h4><p>如果选择的是 <code>Compact, Data at Address 0</code> 模式，则程序从 0x00003000 开始存储， data 申请的数据空间只有 12288 Byte</p>
 <p>以下是一些题目分析</p>
 <h3 id="哈密顿回路"><a href="#哈密顿回路" class="headerlink" title="哈密顿回路"></a>哈密顿回路</h3><p>输入一个具有 $n$ 个顶点的无向图 $G$ ，判断 $G$ 是否有哈密尔顿回路。</p>
 <p>哈密顿回路的定义：设 $G&#x3D;(V,E)$ 是一个图，若 $G$ 中一个回路通过且仅通过每一个顶点一次，则称这个回路为哈密顿回路。</p>
@@ -643,9 +641,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/09/28/Logisim/" title="Logisim">
+                      <a href="/2025/09/28/LogisimPre/" title="LogisimPre">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Logisim</span>
+                        <span class="hidden-mobile">LogisimPre</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
