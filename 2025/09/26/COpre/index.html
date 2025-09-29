@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/img/swap_Logisim.png">
 <meta property="article:published_time" content="2025-09-26T02:50:42.007Z">
-<meta property="article:modified_time" content="2025-09-28T14:10:26.952Z">
+<meta property="article:modified_time" content="2025-09-29T13:44:54.474Z">
 <meta property="article:author" content="rippor">
 <meta property="article:tag" content="编程">
 <meta name="twitter:card" content="summary_large_image">
@@ -325,7 +325,7 @@ mjx-container[display="true"] + br {
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.8k 字
+          3.1k 字
         
       </span>
     
@@ -336,7 +336,7 @@ mjx-container[display="true"] + br {
         
         
         
-          24 分钟
+          27 分钟
         
       </span>
     
@@ -828,6 +828,19 @@ mjx-container[display="true"] + br {
 <p>关于 dfs 的实现这里笔者选择多传入一个计数器 <code>sum</code> ，这样可以少写一个循环来判断是否走完全程</p>
 <p>由于 G 和 book 都只看 01 ，这里笔者耍了小聪明选择 <code>sb</code> 和 <code>lb</code> 但是参数数量对不上导致 <code>word</code> 存储出错，我真是个大 <code>sb</code></p>
 <p>解决方法也比较粗暴，单开一个 <code>t7</code> 作为  <code>sum</code> .</p>
+<h2 id="Pre上机"><a href="#Pre上机" class="headerlink" title="Pre上机"></a>Pre上机</h2><blockquote>
+<p>我是猪</p>
+</blockquote>
+<h3 id="心路历程"><a href="#心路历程" class="headerlink" title="心路历程"></a>心路历程</h3><p>Logisim 是个走地图，如果下一目标点违法（超出图外或是位于障碍处），那么就输出flag = 1 一个周期（初始默认为0），并且<strong>本次不移动</strong>，如果合法就移动，如果到目标点就输出 out = 0 ，然后采用的是异步复位信号</p>
+<p>猪波上来就确定 state 存 x 和 y 做 mealy 机，然后加两个判断机</p>
+<p>但是wa</p>
+<p>好在浏览了一遍后面两个很简单，skip skip skip</p>
+<p>Verilog 是输入 32 位，然后 4 位一划分对每个数据变换，然后再拼回去输出，是简单的组合逻辑，至于 %16 的要求，让他自然溢出即可</p>
+<p>这里给自己下了个小绊子，a0 忘记 assign 乐，好在看波形可以很轻松看出来</p>
+<p>Mars 输入一个矩阵，根据输入参数输出其中的小矩阵，其实两次循环基本上结构差不多，写个 getaddress 的宏会很方便，记得 *4 对齐 word</p>
+<p>然后这里猪波又发癫了，输入 16 个数据发现还要输入，以为输入写错了，结果后面本来就要再输入 4 个参数</p>
+<p>最后 Logisim 很自然地找到了是 flag 输出地问题，九点之前疯狂改输出逻辑，但是无果，然后过时间了发现 pre 免费加长 60 分钟，然后冷静下来，盯着题目看见提示 <strong>reset后为0</strong> 想起来没给 flag 输出的寄存器接 reset</p>
+<p>总而言之，我是猪</p>
 
                 
               </div>
