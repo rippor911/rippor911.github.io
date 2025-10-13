@@ -8,7 +8,7 @@
     <link href="/2025/09/30/COP0/"/>
     <url>/2025/09/30/COP0/</url>
     
-    <content type="html"><![CDATA[<h2 id="课下"><a href="#课下" class="headerlink" title="课下"></a>课下</h2><h3 id="grf"><a href="#grf" class="headerlink" title="grf"></a>grf</h3><ol><li>子模块不能复用</li><li>先做完子单元在复制</li><li>记得改标签</li></ol><h3 id="fsm"><a href="#fsm" class="headerlink" title="fsm"></a>fsm</h3><p>最主要的问题是同步复位，为了控制是在上升沿接收，我选择用一个寄存器来存复位信息，但是这个复位该不该包含本身呢？</p><p>如果包含了，就只会形成一个小刺虽说好像也可以吧，但是安全性要打个问号</p><p>如果不包含呢，下一个上升沿就会涉及到输入到了但是复位还没归零的问题，总之就是不很美观</p><p>所以最后采用了往年博客中的搭建方法，用多路选择器，如果复位信息被激活那就选择0，否则选择本身</p><h2 id="课上"><a href="#课上" class="headerlink" title="课上"></a>课上</h2>]]></content>
+    <content type="html"><![CDATA[<h2 id="课下"><a href="#课下" class="headerlink" title="课下"></a>课下</h2><h3 id="grf"><a href="#grf" class="headerlink" title="grf"></a>grf</h3><ol><li>子模块不能复用</li><li>先做完子单元在复制</li><li>记得改标签</li></ol><h3 id="fsm"><a href="#fsm" class="headerlink" title="fsm"></a>fsm</h3><p>最主要的问题是同步复位，为了控制是在上升沿接收，我选择用一个寄存器来存复位信息，但是这个复位该不该包含本身呢？</p><p>如果包含了，就只会形成一个小刺虽说好像也可以吧，但是安全性要打个问号</p><p>如果不包含呢，下一个上升沿就会涉及到输入到了但是复位还没归零的问题，总之就是不很美观</p><p>所以最后采用了往年博客中的搭建方法，用多路选择器，如果复位信息被激活那就选择0，否则选择本身</p><h3 id="ftoi"><a href="#ftoi" class="headerlink" title="ftoi"></a>ftoi</h3><p>不要排线太挤</p><p>貌似评测的时候会对提交的 circuit 进行缩放之类的？然后就会让本来不该连在一起的线连起来了</p><p>这个错误还是挺难分析出来的，如果上机遇到就寄了</p><h2 id="课上"><a href="#课上" class="headerlink" title="课上"></a>课上</h2>]]></content>
     
     
     <categories>
