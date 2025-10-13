@@ -27,7 +27,7 @@
 <meta property="og:description" content="课下grf 子模块不能复用 先做完子单元在复制 记得改标签  fsm最主要的问题是同步复位，为了控制是在上升沿接收，我选择用一个寄存器来存复位信息，但是这个复位该不该包含本身呢？ 如果包含了，就只会形成一个小刺虽说好像也可以吧，但是安全性要打个问号 如果不包含呢，下一个上升沿就会涉及到输入到了但是复位还没归零的问题，总之就是不很美观 所以最后采用了往年博客中的搭建方法，用多路选择器，如果复位信息被">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-09-30T04:33:39.000Z">
-<meta property="article:modified_time" content="2025-10-13T10:14:04.076Z">
+<meta property="article:modified_time" content="2025-10-13T14:10:39.726Z">
 <meta property="article:author" content="rippor">
 <meta property="article:tag" content="编程">
 <meta name="twitter:card" content="summary_large_image">
@@ -323,7 +323,7 @@ mjx-container[display="true"] + br {
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          259 字
+          358 字
         
       </span>
     
@@ -388,7 +388,11 @@ mjx-container[display="true"] + br {
 <h3 id="ftoi"><a href="#ftoi" class="headerlink" title="ftoi"></a>ftoi</h3><p>不要排线太挤</p>
 <p>貌似评测的时候会对提交的 circuit 进行缩放之类的？然后就会让本来不该连在一起的线连起来了</p>
 <p>这个错误还是挺难分析出来的，如果上机遇到就寄了</p>
-<h2 id="课上"><a href="#课上" class="headerlink" title="课上"></a>课上</h2>
+<h2 id="课上"><a href="#课上" class="headerlink" title="课上"></a>课上</h2><h3 id="异步复位逻辑"><a href="#异步复位逻辑" class="headerlink" title="异步复位逻辑"></a>异步复位逻辑</h3><p>最方便的是利用寄存器自带的 0 搞事，我用的是做差方法，也就是输入 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.375ex;" xmlns="http://www.w3.org/2000/svg" width="6.081ex" height="1.904ex" role="img" focusable="false" viewBox="0 -676 2688 841.6"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D44E" d="M33 157Q33 258 109 349T280 441Q331 441 370 392Q386 422 416 422Q429 422 439 414T449 394Q449 381 412 234T374 68Q374 43 381 35T402 26Q411 27 422 35Q443 55 463 131Q469 151 473 152Q475 153 483 153H487Q506 153 506 144Q506 138 501 117T481 63T449 13Q436 0 417 -8Q409 -10 393 -10Q359 -10 336 5T306 36L300 51Q299 52 296 50Q294 48 292 46Q233 -10 172 -10Q117 -10 75 30T33 157ZM351 328Q351 334 346 350T323 385T277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q217 26 254 59T298 110Q300 114 325 217T351 328Z"></path></g><g data-mml-node="mn" transform="translate(562,-150) scale(0.707)"><path data-c="30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path></g></g><g data-mml-node="mo" transform="translate(1187.8,0)"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path></g><g data-mml-node="mn" transform="translate(2188,0)"><path data-c="37" d="M55 458Q56 460 72 567L88 674Q88 676 108 676H128V672Q128 662 143 655T195 646T364 644H485V605L417 512Q408 500 387 472T360 435T339 403T319 367T305 330T292 284T284 230T278 162T275 80Q275 66 275 52T274 28V19Q270 2 255 -10T221 -22Q210 -22 200 -19T179 0T168 40Q168 198 265 368Q285 400 349 489L395 552H302Q128 552 119 546Q113 543 108 522T98 479L95 458V455H55V458Z"></path></g></g></g></svg></mjx-container> 然后输出 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.375ex;" xmlns="http://www.w3.org/2000/svg" width="6.081ex" height="1.904ex" role="img" focusable="false" viewBox="0 -676 2688 841.6"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D44E" d="M33 157Q33 258 109 349T280 441Q331 441 370 392Q386 422 416 422Q429 422 439 414T449 394Q449 381 412 234T374 68Q374 43 381 35T402 26Q411 27 422 35Q443 55 463 131Q469 151 473 152Q475 153 483 153H487Q506 153 506 144Q506 138 501 117T481 63T449 13Q436 0 417 -8Q409 -10 393 -10Q359 -10 336 5T306 36L300 51Q299 52 296 50Q294 48 292 46Q233 -10 172 -10Q117 -10 75 30T33 157ZM351 328Q351 334 346 350T323 385T277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q217 26 254 59T298 110Q300 114 325 217T351 328Z"></path></g><g data-mml-node="mn" transform="translate(562,-150) scale(0.707)"><path data-c="30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path></g></g><g data-mml-node="mo" transform="translate(1187.8,0)"><path data-c="2B" d="M56 237T56 250T70 270H369V420L370 570Q380 583 389 583Q402 583 409 568V270H707Q722 262 722 250T707 230H409V-68Q401 -82 391 -82H389H387Q375 -82 369 -68V230H70Q56 237 56 250Z"></path></g><g data-mml-node="mn" transform="translate(2188,0)"><path data-c="37" d="M55 458Q56 460 72 567L88 674Q88 676 108 676H128V672Q128 662 143 655T195 646T364 644H485V605L417 512Q408 500 387 472T360 435T339 403T319 367T305 330T292 284T284 230T278 162T275 80Q275 66 275 52T274 28V19Q270 2 255 -10T221 -22Q210 -22 200 -19T179 0T168 40Q168 198 265 368Q285 400 349 489L395 552H302Q128 552 119 546Q113 543 108 522T98 479L95 458V455H55V458Z"></path></g></g></g></svg></mjx-container></p>
+<p>后来助教告诉我可以用异或，因为两次异或同一个就没了，与 0 异或可以赋值</p>
+<p>第二种方法更快一点</p>
+<h3 id="Tunnel-问题"><a href="#Tunnel-问题" class="headerlink" title="Tunnel 问题"></a>Tunnel 问题</h3><p>大量复制之后要检查 Tunnel 的标签是不是对的</p>
+
                 
               </div>
             
