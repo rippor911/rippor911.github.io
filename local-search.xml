@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>COP1</title>
+    <link href="/2025/10/14/COP1/"/>
+    <url>/2025/10/14/COP1/</url>
+    
+    <content type="html"><![CDATA[<h2 id="课下"><a href="#课下" class="headerlink" title="课下"></a>课下</h2><ol><li>op !&#x3D; Op</li><li>多目运算符作为表达式，各部分符号会影响</li><li>灵活运用位拼接符实现符号扩展：<code>&#123;&#123;16&#123;imm[15:15]&#125;&#125;,imm[15:0]&#125;</code></li></ol>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>COP0</title>
     <link href="/2025/09/30/COP0/"/>
     <url>/2025/09/30/COP0/</url>
