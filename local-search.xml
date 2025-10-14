@@ -8,7 +8,7 @@
     <link href="/2025/10/14/COP1/"/>
     <url>/2025/10/14/COP1/</url>
     
-    <content type="html"><![CDATA[<h2 id="课下"><a href="#课下" class="headerlink" title="课下"></a>课下</h2><ol><li>op !&#x3D; Op</li><li>多目运算符作为表达式，各部分符号会影响</li><li>灵活运用位拼接符实现符号扩展：<code>&#123;&#123;16&#123;imm[15:15]&#125;&#125;,imm[15:0]&#125;</code></li></ol>]]></content>
+    <content type="html"><![CDATA[<h2 id="FSM-设计思路"><a href="#FSM-设计思路" class="headerlink" title="FSM 设计思路"></a>FSM 设计思路</h2><ol><li>状态逻辑图</li><li>状态化简</li><li>状态编码</li><li>状态转移（包含复位逻辑）</li><li>输出逻辑</li></ol><h2 id="课下"><a href="#课下" class="headerlink" title="课下"></a>课下</h2><ol><li>op !&#x3D; Op</li><li>多目运算符作为表达式，各部分符号会影响</li><li>灵活运用位拼接符实现符号扩展：<code>&#123;&#123;16&#123;imm[15:15]&#125;&#125;,imm[15:0]&#125;</code></li></ol>]]></content>
     
     
     
