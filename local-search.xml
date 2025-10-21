@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>COP2</title>
+    <link href="/2025/10/21/COP2/"/>
+    <url>/2025/10/21/COP2/</url>
+    
+    <content type="html"><![CDATA[<h2 id="MARS-编写-MIPS-汇编"><a href="#MARS-编写-MIPS-汇编" class="headerlink" title="MARS 编写 MIPS 汇编"></a>MARS 编写 MIPS 汇编</h2><p><strong>1.善用宏</strong>：</p><figure class="highlight mips"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs MIPS"><span class="hljs-meta">.macro</span> Name(%arg)<br><br>.end_macro<br></code></pre></td></tr></table></figure><p>使用参数的宏可以复用相似代码，让代码更简洁</p><p><strong>2.条件分支与循环控制</strong>：</p><p>主要利用条件指令跳转，这里需要注意循环一定要记得 i++</p><p><strong>3.函数调用方法</strong>：</p><p>使用 $sp 进行栈存储，需要注意后入先出，存储返回地址和可能会覆盖到的寄存器数据，保证返回时能够恢复到原来的样子</p><p>jal 指令可以链接到下一条指令（存储到 $ra）</p><figure class="highlight mips"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs MIPS"><span class="hljs-symbol">function:</span><br>saveStack($<span class="hljs-built_in">ra</span>)<br>saveStack($<span class="hljs-built_in">t0</span>)<br><br>calculation……<br><span class="hljs-symbol"></span><br><span class="hljs-symbol">callSelf:</span><br><span class="hljs-keyword">jal </span>function<br><span class="hljs-symbol"></span><br><span class="hljs-symbol">return:</span><br>readStack($<span class="hljs-built_in">t0</span>)<br>readStack($<span class="hljs-built_in">ra</span>)<br><span class="hljs-keyword">jr </span>$<span class="hljs-built_in">ra</span><br></code></pre></td></tr></table></figure><p><strong>4.多维变量输入</strong>：</p><p>都需要压成一维数组，建议用宏写 getAddress，保证地址计算方式一致的同时减少代码复制粘贴产生的冗余和错误</p><p><strong>5.格式化输入输出</strong>：</p><p>F1 help 可以看 syscall 用法</p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>COP1</title>
     <link href="/2025/10/14/COP1/"/>
     <url>/2025/10/14/COP1/</url>

@@ -19,22 +19,22 @@
   <meta name="author" content="rippor">
   <meta name="keywords" content="编程">
   
-    <meta name="description" content="FSM 设计思路 状态逻辑图 状态化简 状态编码 状态转移（包含复位逻辑） 输出逻辑  课下省流 op !&#x3D; Op 多目运算符作为表达式，各部分符号会影响 灵活运用位拼接符实现符号扩展：&#123;&#123;16&#123;imm[15:15]&#125;&#125;,imm[15:0]&#125; posedge clk or posedge clr (right)  课上卷积急中生">
+    <meta name="description" content="MARS 编写 MIPS 汇编1.善用宏： 123.macro Name(%arg).end_macro  使用参数的宏可以复用相似代码，让代码更简洁 2.条件分支与循环控制： 主要利用条件指令跳转，这里需要注意循环一定要记得 i++ 3.函数调用方法： 使用 $sp 进行栈存储，需要注意后入先出，存储返回地址和可能会覆盖到的寄存器数据，保证返回时能够恢复到原来的样子 jal 指令可以链接到下一条">
 <meta property="og:type" content="article">
-<meta property="og:title" content="COP1">
-<meta property="og:url" content="http://example.com/2025/10/14/COP1/index.html">
+<meta property="og:title" content="COP2">
+<meta property="og:url" content="http://example.com/2025/10/21/COP2/index.html">
 <meta property="og:site_name" content="Adventure">
-<meta property="og:description" content="FSM 设计思路 状态逻辑图 状态化简 状态编码 状态转移（包含复位逻辑） 输出逻辑  课下省流 op !&#x3D; Op 多目运算符作为表达式，各部分符号会影响 灵活运用位拼接符实现符号扩展：&#123;&#123;16&#123;imm[15:15]&#125;&#125;,imm[15:0]&#125; posedge clk or posedge clr (right)  课上卷积急中生">
+<meta property="og:description" content="MARS 编写 MIPS 汇编1.善用宏： 123.macro Name(%arg).end_macro  使用参数的宏可以复用相似代码，让代码更简洁 2.条件分支与循环控制： 主要利用条件指令跳转，这里需要注意循环一定要记得 i++ 3.函数调用方法： 使用 $sp 进行栈存储，需要注意后入先出，存储返回地址和可能会覆盖到的寄存器数据，保证返回时能够恢复到原来的样子 jal 指令可以链接到下一条">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-10-14T03:51:23.000Z">
-<meta property="article:modified_time" content="2025-10-20T13:44:48.182Z">
+<meta property="article:published_time" content="2025-10-21T00:46:11.000Z">
+<meta property="article:modified_time" content="2025-10-21T08:49:47.943Z">
 <meta property="article:author" content="rippor">
 <meta property="article:tag" content="编程">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>COP1 - Adventure</title>
+  <title>COP2 - Adventure</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -188,7 +188,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="COP1"></span>
+            <span id="subtitle" data-typed-text="COP2"></span>
           
         </div>
 
@@ -199,8 +199,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-10-14 11:51" pubdate>
-          2025年10月14日 中午
+        <time datetime="2025-10-21 08:46" pubdate>
+          2025年10月21日 早上
         </time>
       </span>
     
@@ -211,7 +211,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          247 字
+          218 字
         
       </span>
     
@@ -222,7 +222,7 @@
         
         
         
-          3 分钟
+          2 分钟
         
       </span>
     
@@ -259,31 +259,26 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">COP1</h1>
+            <h1 id="seo-header">COP2</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="FSM-设计思路"><a href="#FSM-设计思路" class="headerlink" title="FSM 设计思路"></a>FSM 设计思路</h2><ol>
-<li>状态逻辑图</li>
-<li>状态化简</li>
-<li>状态编码</li>
-<li>状态转移（包含复位逻辑）</li>
-<li>输出逻辑</li>
-</ol>
-<h2 id="课下"><a href="#课下" class="headerlink" title="课下"></a>课下</h2><h3 id="省流"><a href="#省流" class="headerlink" title="省流"></a>省流</h3><ol>
-<li>op !&#x3D; Op</li>
-<li>多目运算符作为表达式，各部分符号会影响</li>
-<li>灵活运用位拼接符实现符号扩展：<code>&#123;&#123;16&#123;imm[15:15]&#125;&#125;,imm[15:0]&#125;</code></li>
-<li><code>posedge clk or posedge clr</code> (right)</li>
-</ol>
-<h2 id="课上"><a href="#课上" class="headerlink" title="课上"></a>课上</h2><h3 id="卷积"><a href="#卷积" class="headerlink" title="卷积"></a>卷积</h3><p>急中生智用vscode替换代码，写了个超巨大，主要是不懂怎么在Verilog里面用循环，和第二题坐一桌</p>
-<h3 id="音符记录"><a href="#音符记录" class="headerlink" title="音符记录"></a>音符记录</h3><p>维护支持四种操作的队列（大小为128，初始为全3’b000）：</p>
-<p>2’b00；添加一个数到末尾<br>2’b01：查询特定位置的数<br>2’b11：输出某个数出现次数<br>2’b10：维持输出</p>
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-keyword">reg</span> [<span class="hljs-number">2</span>:<span class="hljs-number">0</span>] queue [<span class="hljs-number">127</span>:<span class="hljs-number">0</span>];<br><br><span class="hljs-keyword">integer</span> i;<br><br><span class="hljs-keyword">for</span>(i = <span class="hljs-number">0</span> ; i &lt; <span class="hljs-number">128</span> ; i = i + <span class="hljs-number">1</span>) <span class="hljs-keyword">begin</span><br>    ……<br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+                <h2 id="MARS-编写-MIPS-汇编"><a href="#MARS-编写-MIPS-汇编" class="headerlink" title="MARS 编写 MIPS 汇编"></a>MARS 编写 MIPS 汇编</h2><p><strong>1.善用宏</strong>：</p>
+<figure class="highlight mips"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs MIPS"><span class="hljs-meta">.macro</span> Name(%arg)<br><br>.end_macro<br></code></pre></td></tr></table></figure>
 
-<h3 id="json匹配"><a href="#json匹配" class="headerlink" title="json匹配"></a>json匹配</h3><p>Moore机，注意输出的时间点在读到 “}” 后转移状态就已经改变输出了</p>
-<p>还有注意不要忘了空集的转移</p>
+<p>使用参数的宏可以复用相似代码，让代码更简洁</p>
+<p><strong>2.条件分支与循环控制</strong>：</p>
+<p>主要利用条件指令跳转，这里需要注意循环一定要记得 i++</p>
+<p><strong>3.函数调用方法</strong>：</p>
+<p>使用 $sp 进行栈存储，需要注意后入先出，存储返回地址和可能会覆盖到的寄存器数据，保证返回时能够恢复到原来的样子</p>
+<p>jal 指令可以链接到下一条指令（存储到 $ra）</p>
+<figure class="highlight mips"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs MIPS"><span class="hljs-symbol">function:</span><br>saveStack($<span class="hljs-built_in">ra</span>)<br>saveStack($<span class="hljs-built_in">t0</span>)<br><br>calculation……<br><span class="hljs-symbol"></span><br><span class="hljs-symbol">callSelf:</span><br><span class="hljs-keyword">jal </span>function<br><span class="hljs-symbol"></span><br><span class="hljs-symbol">return:</span><br>readStack($<span class="hljs-built_in">t0</span>)<br>readStack($<span class="hljs-built_in">ra</span>)<br><span class="hljs-keyword">jr </span>$<span class="hljs-built_in">ra</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>4.多维变量输入</strong>：</p>
+<p>都需要压成一维数组，建议用宏写 getAddress，保证地址计算方式一致的同时减少代码复制粘贴产生的冗余和错误</p>
+<p><strong>5.格式化输入输出</strong>：</p>
+<p>F1 help 可以看 syscall 用法</p>
 
                 
               </div>
@@ -303,18 +298,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/10/21/COP2/" title="COP2">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">COP2</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/09/30/COP0/" title="COP0">
-                        <span class="hidden-mobile">COP0</span>
+                      <a href="/2025/10/14/COP1/" title="COP1">
+                        <span class="hidden-mobile">COP1</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
