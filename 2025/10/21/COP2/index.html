@@ -27,7 +27,7 @@
 <meta property="og:description" content="MARS 编写 MIPS 汇编1.善用宏： 123.macro Name(%arg).end_macro  使用参数的宏可以复用相似代码，让代码更简洁 2.条件分支与循环控制： 主要利用条件指令跳转，这里需要注意循环一定要记得 i++ 3.函数调用方法： 使用 $sp 进行栈存储，需要注意后入先出，存储返回地址和可能会覆盖到的寄存器数据，保证返回时能够恢复到原来的样子 jal 指令可以链接到下一条">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-10-21T00:46:11.000Z">
-<meta property="article:modified_time" content="2025-10-21T08:49:47.943Z">
+<meta property="article:modified_time" content="2025-10-22T15:00:54.237Z">
 <meta property="article:author" content="rippor">
 <meta property="article:tag" content="编程">
 <meta name="twitter:card" content="summary_large_image">
@@ -211,7 +211,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          218 字
+          388 字
         
       </span>
     
@@ -222,7 +222,7 @@
         
         
         
-          2 分钟
+          4 分钟
         
       </span>
     
@@ -279,6 +279,14 @@
 <p>都需要压成一维数组，建议用宏写 getAddress，保证地址计算方式一致的同时减少代码复制粘贴产生的冗余和错误</p>
 <p><strong>5.格式化输入输出</strong>：</p>
 <p>F1 help 可以看 syscall 用法</p>
+<h2 id="P2-题解"><a href="#P2-题解" class="headerlink" title="P2 题解"></a>P2 题解</h2><h3 id="01-迷宫"><a href="#01-迷宫" class="headerlink" title="01 迷宫"></a>01 迷宫</h3><p>核心思路：(这里我从 0 开始编号，和输入的起点终点编号有区别，注意区分)</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs c"><br><span class="hljs-type">int</span> fx[<span class="hljs-number">4</span>] = &#123;<span class="hljs-number">-1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>&#125; , fy[<span class="hljs-number">4</span>] = &#123;<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">-1</span>,<span class="hljs-number">1</span>&#125;;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> x,<span class="hljs-type">int</span> y)</span> <br>&#123;<br>    mark[x][y] = <span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">if</span> (x == goal_x &amp;&amp; y == goal_y) &#123;<br>        sum++;<br>        mark[x][y] = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span> ; i &lt; <span class="hljs-number">4</span> ; ++i) &#123;<br>        <span class="hljs-type">int</span> next_x = x + fx[i];<br>        <span class="hljs-type">int</span> next_y = y + fy[i];<br>        <span class="hljs-keyword">if</span>(next_x &lt; <span class="hljs-number">0</span> || next_y &lt; <span class="hljs-number">0</span> || next_x &gt;= n || next_y &gt;= m) <span class="hljs-keyword">continue</span>;<br>        <span class="hljs-keyword">if</span>(mark[next_x][next_y] == <span class="hljs-number">1</span> || <span class="hljs-built_in">map</span>[next_x][next_y] == <span class="hljs-number">1</span>) <span class="hljs-keyword">continue</span>; <span class="hljs-comment">//mark是已经走过，map是输入时的map</span><br>        dfs(nx,ny);<br>    &#125;<br><br>    mark[x][y] = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">return</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>debug注意：</p>
+<ol>
+<li>x 和 next_x 占的寄存器搞得不太清楚（直接写的原因），有条件最好还是先用 c 写 core function</li>
+<li><code>sw</code> 和 <code>lw</code> 混用</li>
+</ol>
 
                 
               </div>
