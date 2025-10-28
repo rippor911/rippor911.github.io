@@ -392,7 +392,7 @@ mjx-container[display="true"] + br {
       
       <a class="index-excerpt index-excerpt__noimg" href="/2025/10/21/COP2/" target="_self">
         <div>
-          MARS 编写 MIPS 汇编1.善用宏： 123.macro Name(%arg).end_macro  使用参数的宏可以复用相似代码，让代码更简洁 2.条件分支与循环控制： 主要利用条件指令跳转，这里需要注意循环一定要记得 i++ 3.函数调用方法： 使用 $sp 进行栈存储，需要注意后入先出，存储返回地址和可能会覆盖到的寄存器数据，保证返回时能够恢复到原来的样子 jal 指令可以链接到下一条
+          MARS 编写 MIPS 汇编1.善用宏： 123.macro Name(%arg).end_macro  使用参数的宏可以复用相似代码，让代码更简洁 2.条件分支与循环控制： 主要利用条件指令跳转，一定要注意转移方程（如i +&#x3D; 1），注意结束条件 e = nextEdge[e] 3.函数调用方法： 使用 $sp 进行栈存储，需要注意后入先出，存储返回地址和可能会覆盖到的寄存器数据，保
         </div>
       </a>
 

@@ -19,15 +19,15 @@
   <meta name="author" content="rippor">
   <meta name="keywords" content="编程">
   
-    <meta name="description" content="MARS 编写 MIPS 汇编1.善用宏： 123.macro Name(%arg).end_macro  使用参数的宏可以复用相似代码，让代码更简洁 2.条件分支与循环控制： 主要利用条件指令跳转，这里需要注意循环一定要记得 i++ 3.函数调用方法： 使用 $sp 进行栈存储，需要注意后入先出，存储返回地址和可能会覆盖到的寄存器数据，保证返回时能够恢复到原来的样子 jal 指令可以链接到下一条">
+    <meta name="description" content="MARS 编写 MIPS 汇编1.善用宏： 123.macro Name(%arg).end_macro  使用参数的宏可以复用相似代码，让代码更简洁 2.条件分支与循环控制： 主要利用条件指令跳转，一定要注意转移方程（如i +&#x3D; 1），注意结束条件 e &#x3D; nextEdge[e] 3.函数调用方法： 使用 $sp 进行栈存储，需要注意后入先出，存储返回地址和可能会覆盖到的寄存器数据，保">
 <meta property="og:type" content="article">
 <meta property="og:title" content="COP2">
 <meta property="og:url" content="http://example.com/2025/10/21/COP2/index.html">
 <meta property="og:site_name" content="Adventure">
-<meta property="og:description" content="MARS 编写 MIPS 汇编1.善用宏： 123.macro Name(%arg).end_macro  使用参数的宏可以复用相似代码，让代码更简洁 2.条件分支与循环控制： 主要利用条件指令跳转，这里需要注意循环一定要记得 i++ 3.函数调用方法： 使用 $sp 进行栈存储，需要注意后入先出，存储返回地址和可能会覆盖到的寄存器数据，保证返回时能够恢复到原来的样子 jal 指令可以链接到下一条">
+<meta property="og:description" content="MARS 编写 MIPS 汇编1.善用宏： 123.macro Name(%arg).end_macro  使用参数的宏可以复用相似代码，让代码更简洁 2.条件分支与循环控制： 主要利用条件指令跳转，一定要注意转移方程（如i +&#x3D; 1），注意结束条件 e &#x3D; nextEdge[e] 3.函数调用方法： 使用 $sp 进行栈存储，需要注意后入先出，存储返回地址和可能会覆盖到的寄存器数据，保">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-10-21T00:46:11.000Z">
-<meta property="article:modified_time" content="2025-10-28T04:38:49.023Z">
+<meta property="article:modified_time" content="2025-10-28T04:43:54.286Z">
 <meta property="article:author" content="rippor">
 <meta property="article:tag" content="编程">
 <meta name="twitter:card" content="summary_large_image">
@@ -211,7 +211,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          427 字
+          435 字
         
       </span>
     
@@ -269,7 +269,8 @@
 
 <p>使用参数的宏可以复用相似代码，让代码更简洁</p>
 <p><strong>2.条件分支与循环控制</strong>：</p>
-<p>主要利用条件指令跳转，这里需要注意循环一定要记得 i++</p>
+<p>主要利用条件指令跳转，一定要注意转移方程（如i +&#x3D; 1），注意结束条件</p>
+<p><code>e = nextEdge[e]</code></p>
 <p><strong>3.函数调用方法</strong>：</p>
 <p>使用 $sp 进行栈存储，需要注意后入先出，存储返回地址和可能会覆盖到的寄存器数据，保证返回时能够恢复到原来的样子</p>
 <p>jal 指令可以链接到下一条指令（存储到 $ra）</p>
