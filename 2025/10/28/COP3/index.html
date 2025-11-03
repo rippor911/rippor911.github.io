@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="rippor(null)">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set data attribute for CSS variables
+                root.setAttribute("data-theme", theme);
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes once DOM is ready
+            if (document.readyState !== "loading") {
+                document.body.classList.add(theme + "-mode");
+            } else {
+                document.addEventListener("DOMContentLoaded", () => {
+                    document.body.classList.add(theme + "-mode");
+                    document.body.classList.remove((theme === DARK ? LIGHT : DARK) + "-mode");
+                });
+            }
+        })();
+    </script>
+    
+    <!-- Critical CSS to prevent flash -->
+    <style>
+        :root[data-theme="dark"] {
+            --background-color: #202124;
+            --background-color-transparent: rgba(32, 33, 36, 0.6);
+            --second-background-color: #2d2e32;
+            --third-background-color: #34353a;
+            --third-background-color-transparent: rgba(32, 33, 36, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #ffffff;
+            --second-text-color: #eeeeee;
+            --third-text-color: #bebec6;
+            --fourth-text-color: #999999;
+            --default-text-color: #bebec6;
+            --invert-text-color: #373D3F;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(255, 255, 255, 0.08);
+            --shadow-color-2: rgba(255, 255, 255, 0.05);
+        }
+        
+        :root[data-theme="light"] {
+            --background-color: #fff;
+            --background-color-transparent: rgba(255, 255, 255, 0.6);
+            --second-background-color: #f8f8f8;
+            --third-background-color: #f2f2f2;
+            --third-background-color-transparent: rgba(241, 241, 241, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #16171a;
+            --second-text-color: #2f3037;
+            --third-text-color: #5e5e5e;
+            --fourth-text-color: #eeeeee;
+            --default-text-color: #373D3F;
+            --invert-text-color: #bebec6;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(0, 0, 0, 0.08);
+            --shadow-color-2: rgba(0, 0, 0, 0.05);
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+        
+        /* Apply body classes as soon as DOM is ready */
+        :root[data-theme="dark"] body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+    </style>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2025/10/28/cop3/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计组P3——单周期CPULogisim实现">
+<meta property="og:url" content="http://example.com/2025/10/28/COP3/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/redefine-og.webp">
+<meta property="article:published_time" content="2025-10-28T04:39:00.000Z">
+<meta property="article:modified_time" content="2025-11-03T01:26:58.813Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Logisim,单周期CPU">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/redefine-og.webp">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/img/rippor.jpg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/rippor.jpg">
+    <meta name="theme-color" content="#50808E">
+    <link rel="shortcut icon" href="/img/rippor.jpg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            计组P3——单周期CPULogisim实现 | Adventure
+        
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/css/build/tailwind.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"example.com","root":"/","language":"en"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"delete_mask":false,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#50808E","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1500px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":false,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":false},"open_graph":{"enable":true,"image":"/images/redefine-og.webp","description":"Hexo Theme Redefine, Redefine Your Hexo Journey."},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"Adventure","subtitle":{"text":["Never give up."],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":{"github":"https://github.com/rippor911","instagram":null,"zhihu":null,"twitter":null,"email":"ripple12315@163.com"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.5","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","excerpt_length":50,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2022/8/17 11:45:14"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+                <a class="logo-image h-8 w-8 sm:w-10 sm:h-10 mr-3" href="/">
+                    <img src="/img/rippor.jpg" class="w-full h-full rounded-xs">
+                </a>
+            
+            <a class="logo-title" href="/">
+                
+                Adventure
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">6</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">1</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">6</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">计组P3——单周期CPULogisim实现</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="/img/rippor.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">rippor(null)</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv1</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-10-28 12:39</span>
+        <span class="mobile">2025-10-28 12:39</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-11-03 09:26:58</span>
+            <span class="mobile">2025-11-03 09:26:58</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+        <span class="article-categories article-meta-item">
+            <i class="fa-regular fa-folders"></i>&nbsp;
+            <ul>
+                
+                
+                    
+                        
+                        <li>
+                            <a href="/categories/CO/">CO</a>&nbsp;
+                        </li>
+                    
+                    
+                
+            </ul>
+        </span>
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/Logisim-%E5%8D%95%E5%91%A8%E6%9C%9FCPU/">Logisim,单周期CPU</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h2 id="最终展示"><a href="#最终展示" class="headerlink" title="最终展示"></a>最终展示</h2><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/single-circle.png"
+                      alt="single-circle"
+                ></p>
+<h2 id="设计草稿"><a href="#设计草稿" class="headerlink" title="设计草稿"></a>设计草稿</h2><h3 id="指令分析-数据通路"><a href="#指令分析-数据通路" class="headerlink" title="指令分析(数据通路)"></a>指令分析(数据通路)</h3><table>
+<thead>
+<tr>
+<th>Instruction</th>
+<th>PC_next</th>
+<th>Reg1</th>
+<th>Reg2</th>
+<th>Wreg</th>
+<th>wdata</th>
+<th>ALU_A</th>
+<th>ALU_B</th>
+<th>DM_Adr</th>
+<th>DM_wdata</th>
+<th>EXT</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>add</td>
+<td>PC+4</td>
+<td>rs</td>
+<td>rt</td>
+<td>rd</td>
+<td>ALU</td>
+<td>Reg1</td>
+<td>Reg2</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>sub</td>
+<td>PC+4</td>
+<td>rs</td>
+<td>rt</td>
+<td>rd</td>
+<td>ALU</td>
+<td>Reg1</td>
+<td>Reg2</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>ori</td>
+<td>PC+4</td>
+<td>rs</td>
+<td>-</td>
+<td>rt</td>
+<td>ALU</td>
+<td>Reg1</td>
+<td>EXT</td>
+<td>-</td>
+<td>-</td>
+<td>zero(imm16)</td>
+</tr>
+<tr>
+<td>lw</td>
+<td>PC+4</td>
+<td>rs</td>
+<td>-</td>
+<td>rt</td>
+<td>DM_out</td>
+<td>Reg1</td>
+<td>EXT</td>
+<td>ALU</td>
+<td>-</td>
+<td>sign(imm16)</td>
+</tr>
+<tr>
+<td>sw</td>
+<td>PC+4</td>
+<td>rs</td>
+<td>rt</td>
+<td>-</td>
+<td>-</td>
+<td>Reg1</td>
+<td>EXT</td>
+<td>ALU</td>
+<td>Reg2</td>
+<td>sign(imm16)</td>
+</tr>
+<tr>
+<td>beq</td>
+<td>PC+4(f) or PC+4+EXT(t)</td>
+<td>rs</td>
+<td>rt</td>
+<td>-</td>
+<td>-</td>
+<td>Reg1</td>
+<td>Reg2</td>
+<td>-</td>
+<td>-</td>
+<td>sign(imm16&lt;&lt;2)</td>
+</tr>
+<tr>
+<td>lui</td>
+<td>PC+4</td>
+<td>-</td>
+<td>-</td>
+<td>rt</td>
+<td>EXT_Hi</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>不影响(imm16)</td>
+</tr>
+<tr>
+<td>nop</td>
+<td>PC+4</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>jr</td>
+<td>Reg1</td>
+<td>rs</td>
+<td>rt&#x3D;0</td>
+<td>rd&#x3D;0</td>
+<td>-(ALU)</td>
+<td>Reg1</td>
+<td>Reg2</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<p><strong>注意：</strong></p>
+<ul>
+<li>nop为空指令(0x00000000)，不进行任何有效行为（修改寄存器等）</li>
+<li>add,sub 按无符号加减法处理（不考虑溢出）  （个人认为这里应该是说按照有符号的码位，但是按无符号处理）</li>
+<li>由于 jr 可以和 add 、 sub 兼容，即使对 $0 写入也不会发生改变，因此这里进行了合并</li>
+</ul>
+<h3 id="模块制作"><a href="#模块制作" class="headerlink" title="模块制作"></a>模块制作</h3><h4 id="1-IFU（取指令单元）"><a href="#1-IFU（取指令单元）" class="headerlink" title="1. IFU（取指令单元）"></a>1. IFU（取指令单元）</h4><table>
+<thead>
+<tr>
+<th>name</th>
+<th>I&#x2F;O</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>reset</td>
+<td>input</td>
+<td>异步复位</td>
+</tr>
+<tr>
+<td>clk</td>
+<td>input</td>
+<td>时钟</td>
+</tr>
+<tr>
+<td>WE</td>
+<td>input</td>
+<td>写入信号</td>
+</tr>
+<tr>
+<td>wdata[31:0]</td>
+<td>input</td>
+<td>写入数据</td>
+</tr>
+<tr>
+<td>Instr[31:0]</td>
+<td>output</td>
+<td>输出指令</td>
+</tr>
+<tr>
+<td>pc[31:0]</td>
+<td>output</td>
+<td>输出pc计数值</td>
+</tr>
+</tbody></table>
+<p>PC 的起始位置为：0x00003000 ，但 ROM 的起始地址为 0x00000000 ，其实只影响 wdata 和 pc 两个位置，在内部可以仍然从 0 开始。</p>
+<p><strong>注意</strong>：参考指令集，bge(t)时写入 PC + 4 + wdata</p>
+<p>根据数据通路可得到其内部结构：</p>
+<p><strong>上表废弃</strong>，实践发现如果需要添加别的跳转指令，很难用单一的wdata表示，因此选用输入所有信号在IFU内部进行处理</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/IFU.png"
+                      alt="IFU"
+                ></p>
+<p><strong>勘误</strong>：</p>
+<ol>
+<li>Logisim 的 ROM 地址是1、2、3，所以说应该 % 4 得到地址，但外部表现仍然是 + 4</li>
+<li>offset就是偏移量，不需要减0x00003000</li>
+<li><code>jr</code>取出的地址是表地址，要化作内地址需要减偏移量</li>
+</ol>
+<h4 id="2-GRF"><a href="#2-GRF" class="headerlink" title="2. GRF"></a>2. GRF</h4><table>
+<thead>
+<tr>
+<th>name</th>
+<th>I&#x2F;O</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>reset</td>
+<td>input</td>
+<td>异步复位</td>
+</tr>
+<tr>
+<td>clk</td>
+<td>input</td>
+<td>时钟</td>
+</tr>
+<tr>
+<td>Reg1[4:0]</td>
+<td>input</td>
+<td>读1</td>
+</tr>
+<tr>
+<td>Reg2[4:0]</td>
+<td>input</td>
+<td>读2</td>
+</tr>
+<tr>
+<td>Wreg[4:0]</td>
+<td>input</td>
+<td>写</td>
+</tr>
+<tr>
+<td>wdata[31:0]</td>
+<td>input</td>
+<td>写入数据</td>
+</tr>
+<tr>
+<td>WE</td>
+<td>input</td>
+<td>写入信号</td>
+</tr>
+<tr>
+<td>output1[31:0]</td>
+<td>output</td>
+<td>读出1</td>
+</tr>
+<tr>
+<td>output2[31:0]</td>
+<td>output</td>
+<td>读出2</td>
+</tr>
+</tbody></table>
+<p>需要注意 $0 总保持 0，采用 4 * 8 排线，用译码器解出写入寄存器的行列，用标号tunnel输出</p>
+<p>每个单元如下：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/GRFunit.png"
+                      alt="GRFUnit"
+                ></p>
+<p>写入信号与Wreg的行列信号 and 后的到的指定寄存器</p>
+<p><strong>注意</strong>：$0 总保持 0，复用时需要检查标号是否正确</p>
+<p>整体如下：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/GRF.png"
+                      alt="GRF"
+                ></p>
+<h4 id="3-ALU"><a href="#3-ALU" class="headerlink" title="3. ALU"></a>3. ALU</h4><table>
+<thead>
+<tr>
+<th>name</th>
+<th>I&#x2F;O</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A[31:0]</td>
+<td>input</td>
+<td>操作数A</td>
+</tr>
+<tr>
+<td>B[31:0]</td>
+<td>input</td>
+<td>操作数B</td>
+</tr>
+<tr>
+<td>ALUOp[2:0]</td>
+<td>input</td>
+<td>运算信号</td>
+</tr>
+<tr>
+<td>output[31:0]</td>
+<td>output</td>
+<td>输出</td>
+</tr>
+<tr>
+<td>logic</td>
+<td>output</td>
+<td>逻辑输出</td>
+</tr>
+</tbody></table>
+<p>本次初始指令集需要由 add、sub、or、equal种运算，为了可扩展性，选择编码ALUOp 为 3 位，即（更新：补充逻辑左移sll）</p>
+<table>
+<thead>
+<tr>
+<th>operation</th>
+<th>ALUOp</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>add</td>
+<td>000</td>
+</tr>
+<tr>
+<td>sub</td>
+<td>001</td>
+</tr>
+<tr>
+<td>or</td>
+<td>010</td>
+</tr>
+<tr>
+<td>equal</td>
+<td>011</td>
+</tr>
+<tr>
+<td>sll</td>
+<td>100</td>
+</tr>
+</tbody></table>
+<p>结构如下：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/ALU.png"
+                      alt="ALU"
+                ></p>
+<h4 id="4-DM"><a href="#4-DM" class="headerlink" title="4. DM"></a>4. DM</h4><p>使用 RAM 即可，接入异步复位信号</p>
+<p>更新：提高可拓展性，分出信号选择区</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/DM.png"
+                      alt="DM"
+                ></p>
+<h4 id="5-EXT"><a href="#5-EXT" class="headerlink" title="5. EXT"></a>5. EXT</h4><p>使用 16-32EXT即可，注意后接逻辑左移，指向可能的跳转分支</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/EXT.png"
+                      alt="EXT"
+                ></p>
+<p><strong>勘误</strong>：</p>
+<p>看清楚指令集中是signExt还是ZeroExt</p>
+<h4 id="6-Controller"><a href="#6-Controller" class="headerlink" title="6.Controller"></a>6.Controller</h4><p>根据数据通路表可以得到下图：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/singlecircle.png"
+                      alt="2"
+                ></p>
+<p><strong>第一次在这里犯了个错误，不是R指令才是写入rt。</strong></p>
+<p>从中总结需要的控制信号有：not(Rinstr?)、RegWrite、ALUEXT?、RegChoose、ALUOp、MemWrite</p>
+<p>根据func可做Rdecoder(采用独热编码选择):</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/Rdecoder.png"
+                      alt="Rdecoder"
+                ></p>
+<p>根据信号连成下图：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/Controller.png"
+                      alt="Controller"
+                ></p>
+<p><strong>Note</strong>：</p>
+<p>可以看到Rdecoder和Controller都是六位译码，排线时可以复制左边，节约时间</p>
+<p>EXT勘误：注意符号扩展和零扩展，这里增加一个选扩展信号</p>
+<h2 id="测试方案"><a href="#测试方案" class="headerlink" title="测试方案"></a>测试方案</h2><h3 id="1-ori-和-sw"><a href="#1-ori-和-sw" class="headerlink" title="1.ori 和 sw"></a>1.ori 和 sw</h3><p>先测试这两个的原因是main运行的时候没办法查看子电路内部，不过我的RAM是在main电路，通过这样的转换就可以查看grf的内部信息</p>
+<p>然后写了个 py 程序快速生成 32 个寄存器的查看（顺便检查一下有没有连错电路的）</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">32</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;ori $<span class="subst">&#123;i&#125;</span>,$0,<span class="subst">&#123;i&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;sw $<span class="subst">&#123;i&#125;</span>,($<span class="subst">&#123;i&#125;</span>)&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>嗯果不其然第四行确实是连错了，行线连的第三行的</p>
+<p><strong>补充</strong>：</p>
+<p>其实是可以右键子电路查看的</p>
+<p>另外Logisim的RAM一个格子对应的是 4 word，所以上面这个程序<strong>写错了</strong>，而且sw要求偏移量能被 4 整除，所以整理如下：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="number">32</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;ori $<span class="subst">&#123;i&#125;</span>,$0,<span class="subst">&#123;i&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;add $<span class="subst">&#123;i&#125;</span>,$<span class="subst">&#123;i&#125;</span>,$<span class="subst">&#123;i&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;add $<span class="subst">&#123;i&#125;</span>,$<span class="subst">&#123;i&#125;</span>,$<span class="subst">&#123;i&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;sw $<span class="subst">&#123;i&#125;</span>,($<span class="subst">&#123;i&#125;</span>)&quot;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="2-混合测试1"><a href="#2-混合测试1" class="headerlink" title="2. 混合测试1"></a>2. 混合测试1</h3><p>使用以下教程提供的代码，使用它生成机器码，但是由于不考虑溢出，所以对拍数据用对应的addu查看</p>
+<div class="code-container" data-rel="Mips"><figure class="iseeu highlight mips"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ori </span>$<span class="built_in">a0</span>, $<span class="number">0</span>, <span class="number">123</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="built_in">a1</span>, $<span class="built_in">a0</span>, <span class="number">456</span></span><br><span class="line"><span class="keyword">lui </span>$<span class="built_in">a2</span>, <span class="number">123</span>            <span class="comment"># 符号位为 0</span></span><br><span class="line"><span class="keyword">lui </span>$<span class="built_in">a3</span>, <span class="number">0xffff</span>         <span class="comment"># 符号位为 1</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="built_in">a3</span>, $<span class="built_in">a3</span>, <span class="number">0xffff</span>    <span class="comment"># $a3 = -1</span></span><br><span class="line"><span class="keyword">add </span>$<span class="built_in">s0</span>, $<span class="built_in">a0</span>, $<span class="built_in">a2</span>      <span class="comment"># 正正</span></span><br><span class="line"><span class="keyword">add </span>$<span class="built_in">s1</span>, $<span class="built_in">a0</span>, $<span class="built_in">a3</span>      <span class="comment"># 正负</span></span><br><span class="line"><span class="keyword">add </span>$<span class="built_in">s2</span>, $<span class="built_in">a3</span>, $<span class="built_in">a3</span>      <span class="comment"># 负负</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="built_in">t0</span>, $<span class="number">0</span>, <span class="number">0x0000</span></span><br><span class="line"><span class="keyword">sw </span>$<span class="built_in">a0</span>, <span class="number">0</span>($<span class="built_in">t0</span>)</span><br><span class="line"><span class="keyword">sw </span>$<span class="built_in">a1</span>, <span class="number">4</span>($<span class="built_in">t0</span>)</span><br><span class="line"><span class="keyword">sw </span>$<span class="built_in">a2</span>, <span class="number">8</span>($<span class="built_in">t0</span>)</span><br><span class="line"><span class="keyword">sw </span>$<span class="built_in">a3</span>, <span class="number">12</span>($<span class="built_in">t0</span>)</span><br><span class="line"><span class="keyword">sw </span>$<span class="built_in">s0</span>, <span class="number">16</span>($<span class="built_in">t0</span>)</span><br><span class="line"><span class="keyword">sw </span>$<span class="built_in">s1</span>, <span class="number">20</span>($<span class="built_in">t0</span>)</span><br><span class="line"><span class="keyword">sw </span>$<span class="built_in">s2</span>, <span class="number">24</span>($<span class="built_in">t0</span>)</span><br><span class="line"><span class="keyword">lw </span>$<span class="built_in">a0</span>, <span class="number">0</span>($<span class="built_in">t0</span>)</span><br><span class="line"><span class="keyword">lw </span>$<span class="built_in">a1</span>, <span class="number">12</span>($<span class="built_in">t0</span>)</span><br><span class="line"><span class="keyword">sw </span>$<span class="built_in">a0</span>, <span class="number">28</span>($<span class="built_in">t0</span>)</span><br><span class="line"><span class="keyword">sw </span>$<span class="built_in">a1</span>, <span class="number">32</span>($<span class="built_in">t0</span>)</span><br><span class="line"><span class="keyword">ori </span>$<span class="built_in">a0</span>, $<span class="number">0</span>, <span class="number">1</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="built_in">a1</span>, $<span class="number">0</span>, <span class="number">2</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="built_in">a2</span>, $<span class="number">0</span>, <span class="number">1</span></span><br><span class="line"><span class="keyword">beq </span>$<span class="built_in">a0</span>, $<span class="built_in">a1</span>, loop1     <span class="comment"># 不相等</span></span><br><span class="line"><span class="keyword">beq </span>$<span class="built_in">a0</span>, $<span class="built_in">a2</span>, loop2     <span class="comment"># 相等</span></span><br><span class="line"><span class="symbol">loop1:</span><span class="keyword">sw </span>$<span class="built_in">a0</span>, <span class="number">36</span>($<span class="built_in">t0</span>)</span><br><span class="line"><span class="symbol">loop2:</span><span class="keyword">sw </span>$<span class="built_in">a1</span>, <span class="number">40</span>($<span class="built_in">t0</span>)</span><br></pre></td></tr></table></figure></div>
+
+<p>检查出分支可能有问题，下面测试分支，检查后实现对IFU的勘误2</p>
+<h3 id="3-混合测试2"><a href="#3-混合测试2" class="headerlink" title="3.混合测试2"></a>3.混合测试2</h3><div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">v2.0 raw</span><br><span class="line">341c0000</span><br><span class="line">341d0000</span><br><span class="line">34013456</span><br><span class="line">00210820</span><br><span class="line">8c010004</span><br><span class="line">ac010004</span><br><span class="line">3c027878</span><br><span class="line">00411822</span><br><span class="line">3c051234</span><br><span class="line">34040005</span><br><span class="line">00000000</span><br><span class="line">ac85ffff</span><br><span class="line">8c83ffff</span><br><span class="line">10650001</span><br><span class="line">1000000d</span><br><span class="line">34670404</span><br><span class="line">10e3000b</span><br><span class="line">00000000</span><br><span class="line">3c087777</span><br><span class="line">3508ffff</span><br><span class="line">00080022</span><br><span class="line">34001100</span><br><span class="line">00e65020</span><br><span class="line">34080000</span><br><span class="line">34090001</span><br><span class="line">340a0001</span><br><span class="line">010a4020</span><br><span class="line">1109fffe</span><br><span class="line">1000ffff</span><br></pre></td></tr></table></figure></div>
+
+<p>转换成MIPS代码如下：</p>
+<div class="code-container" data-rel="Mips"><figure class="iseeu highlight mips"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ori </span>$<span class="number">28</span>,$<span class="number">0</span>,<span class="number">0</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">29</span>,$<span class="number">0</span>,<span class="number">0</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">1</span>,$<span class="number">0</span>,<span class="number">13398</span></span><br><span class="line"><span class="keyword">add </span>$<span class="number">1</span>,$<span class="number">1</span>,$<span class="number">1</span> </span><br><span class="line"><span class="keyword">lw </span>$<span class="number">1</span>,<span class="number">4</span>($<span class="number">0</span>)</span><br><span class="line"><span class="keyword">sw </span>$<span class="number">1</span>,<span class="number">4</span>($<span class="number">0</span>)</span><br><span class="line"><span class="keyword">lui </span>$<span class="number">2</span>,<span class="number">30840</span></span><br><span class="line"><span class="keyword">sub </span>$<span class="number">3</span>,$<span class="number">2</span>,$<span class="number">1</span></span><br><span class="line"><span class="keyword">lui </span>$<span class="number">5</span>,<span class="number">4660</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">4</span>,$<span class="number">0</span>,<span class="number">5</span></span><br><span class="line"><span class="keyword">nop</span></span><br><span class="line"><span class="keyword"></span><span class="keyword">sw </span>$<span class="number">5</span>,-<span class="number">1</span>($<span class="number">4</span>)</span><br><span class="line"><span class="keyword">lw </span>$<span class="number">3</span>,-<span class="number">1</span>($<span class="number">4</span>)</span><br><span class="line"><span class="keyword">beq </span>$<span class="number">3</span>,$<span class="number">5</span>,next</span><br><span class="line"><span class="keyword">beq </span>$<span class="number">0</span>,$<span class="number">0</span>,end</span><br><span class="line"><span class="symbol">next:</span><span class="keyword">ori </span>$<span class="number">7</span>,$<span class="number">3</span>,<span class="number">1028</span></span><br><span class="line"><span class="keyword">beq </span>$<span class="number">7</span>,$<span class="number">3</span>,end</span><br><span class="line"><span class="keyword">nop</span></span><br><span class="line"><span class="keyword"></span><span class="keyword">lui </span>$<span class="number">8</span>,<span class="number">30583</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">8</span>,$<span class="number">8</span>,<span class="number">65535</span></span><br><span class="line"><span class="keyword">sub </span>$<span class="number">0</span>,$<span class="number">0</span>,$<span class="number">8</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">0</span>,<span class="number">4352</span></span><br><span class="line"><span class="keyword">add </span>$<span class="number">10</span>,$<span class="number">7</span>,$<span class="number">6</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">8</span>,$<span class="number">0</span>,<span class="number">0</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">9</span>,$<span class="number">0</span>,<span class="number">1</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">10</span>,$<span class="number">0</span>,<span class="number">1</span></span><br><span class="line"><span class="symbol">uu:</span><span class="keyword">add </span>$<span class="number">8</span>,$<span class="number">8</span>,$<span class="number">10</span></span><br><span class="line"><span class="symbol">last:</span><span class="keyword">beq </span>$<span class="number">8</span>,$<span class="number">9</span>,uu</span><br><span class="line"><span class="symbol">end:</span><span class="keyword">beq </span>$<span class="number">0</span>,$<span class="number">0</span>,end</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="4-混合测试3"><a href="#4-混合测试3" class="headerlink" title="4.混合测试3"></a>4.混合测试3</h3><div class="code-container" data-rel="Mips"><figure class="iseeu highlight mips"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ori </span>$<span class="number">0</span>,$<span class="number">0</span>,<span class="number">72</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">1</span>,$<span class="number">0</span>,<span class="number">1</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">2</span>,$<span class="number">0</span>,<span class="number">2</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">3</span>,$<span class="number">0</span>,<span class="number">3</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">4</span>,$<span class="number">0</span>,<span class="number">4</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">5</span>,$<span class="number">0</span>,<span class="number">5</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">6</span>,$<span class="number">0</span>,<span class="number">6</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">7</span>,$<span class="number">0</span>,<span class="number">7</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">8</span>,$<span class="number">0</span>,<span class="number">8</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">9</span>,$<span class="number">0</span>,<span class="number">9</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">10</span>,$<span class="number">0</span>,<span class="number">10</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">11</span>,$<span class="number">0</span>,<span class="number">11</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">12</span>,$<span class="number">0</span>,<span class="number">12</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">13</span>,$<span class="number">0</span>,<span class="number">13</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">14</span>,$<span class="number">0</span>,<span class="number">14</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">15</span>,$<span class="number">0</span>,<span class="number">15</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">16</span>,$<span class="number">0</span>,<span class="number">16</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">17</span>,$<span class="number">0</span>,<span class="number">17</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">18</span>,$<span class="number">0</span>,<span class="number">18</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">19</span>,$<span class="number">0</span>,<span class="number">19</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">20</span>,$<span class="number">0</span>,<span class="number">20</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">21</span>,$<span class="number">0</span>,<span class="number">21</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">22</span>,$<span class="number">0</span>,<span class="number">22</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">23</span>,$<span class="number">0</span>,<span class="number">23</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">24</span>,$<span class="number">0</span>,<span class="number">24</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">25</span>,$<span class="number">0</span>,<span class="number">25</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">26</span>,$<span class="number">0</span>,<span class="number">26</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">27</span>,$<span class="number">0</span>,<span class="number">27</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">28</span>,$<span class="number">0</span>,<span class="number">28</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">29</span>,$<span class="number">0</span>,<span class="number">29</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">30</span>,$<span class="number">0</span>,<span class="number">30</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="number">31</span>,$<span class="number">0</span>,<span class="number">31</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">lui </span>$<span class="built_in">t1</span>,<span class="number">0xffff</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="built_in">t1</span>,$<span class="built_in">t2</span>,<span class="number">0xffff</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ori </span>$<span class="built_in">sp</span>,$<span class="number">0</span>,<span class="number">0</span></span><br><span class="line"><span class="symbol"></span></span><br><span class="line"><span class="symbol">loop:</span></span><br><span class="line"><span class="keyword">beq </span>$<span class="built_in">t0</span>,$<span class="number">31</span>,next</span><br><span class="line"></span><br><span class="line"><span class="keyword">sub </span>$<span class="built_in">s1</span>,$<span class="built_in">s2</span>,$<span class="built_in">s3</span></span><br><span class="line"><span class="keyword">add </span>$<span class="built_in">s3</span>,$<span class="built_in">t0</span>,$<span class="built_in">t6</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="built_in">t3</span>,$<span class="built_in">t2</span>,<span class="number">1000</span></span><br><span class="line"><span class="keyword">lui </span>$<span class="number">5</span>,<span class="number">0xabcd</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">nop</span></span><br><span class="line"><span class="keyword"></span><span class="keyword">sw </span>$<span class="built_in">t0</span>,<span class="number">0</span>($<span class="built_in">sp</span>)</span><br><span class="line"><span class="keyword">add </span>$<span class="built_in">sp</span>,$<span class="built_in">sp</span>,$<span class="number">4</span></span><br><span class="line"><span class="keyword">sw </span>$<span class="built_in">t0</span>,<span class="number">0</span>($<span class="built_in">sp</span>)</span><br><span class="line"><span class="keyword">lw </span>$<span class="built_in">s2</span>,-<span class="number">4</span>($<span class="built_in">sp</span>)</span><br><span class="line"><span class="keyword">nop</span></span><br><span class="line"><span class="keyword"></span></span><br><span class="line"><span class="keyword">add </span>$<span class="built_in">t0</span>,$<span class="built_in">t0</span>,$<span class="number">1</span></span><br><span class="line"><span class="keyword">beq </span>$<span class="number">0</span>,$<span class="number">0</span>,loop</span><br><span class="line"><span class="symbol">next:</span></span><br><span class="line"><span class="keyword">nop</span></span><br><span class="line"><span class="keyword"></span><span class="keyword">lui </span>$<span class="number">7</span>,<span class="number">100</span></span><br></pre></td></tr></table></figure></div>
+
+<p>为了检测输出，我模仿Pre和P0教程出现的测试电路，搭建出test：</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/test.png"
+                      alt="test"
+                ></p>
+<p>该测试方法需要与其他CPU对拍，这里我在双方均通过weak的情况下交换CPU测试，不建议一方未完成进行这种行为，只作学习参考使用。</p>
+<h3 id="5-测评机对拍"><a href="#5-测评机对拍" class="headerlink" title="5.测评机对拍"></a>5.测评机对拍</h3><p>参考了<a class="link"   target="_blank" rel="noopener" href="https://github.com/Kie-Chi/COT" >COT<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>进行测试，以下只是使用日记，参考价值不大。</p>
+<p>上来就报错：<code>AttributeError: &#39;str&#39; object has no attribute &#39;keys&#39;</code></p>
+<p>先根据AI的提示，把：</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先设置基本属性</span></span><br><span class="line"><span class="variable language_">self</span>.__set_attr(file_config)</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> <span class="variable language_">self</span>.__lazy:</span><br><span class="line">    file_config = <span class="variable language_">self</span>.__format_set(file_config)</span><br></pre></td></tr></table></figure></div>
+
+<p>改成了</p>
+<div class="code-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先设置基本属性</span></span><br><span class="line"><span class="variable language_">self</span>.__set_attr(file_config)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果是非懒人模式，格式化设置并重新设置属性</span></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> <span class="variable language_">self</span>.__lazy:</span><br><span class="line">    file_config = <span class="variable language_">self</span>.__format_set(file_config)</span><br><span class="line">    <span class="variable language_">self</span>.__set_attr(file_config)  <span class="comment"># 重新设置格式化后的属性</span></span><br></pre></td></tr></table></figure></div>
+
+<p>然后需要根据指南填写config，由于只是测简化指令，最好还是根据需求填config而不是用lazy mode。</p>
+<p>但是他给的 cpu 貌似在 logisim 运行的时候有问题，不知道是不是因为简化指令的锅，我在查看dif log的时候以为自己哪做错了，浪费了半天，才发现自己的cpu是叫mycpu而不是cpu（晕）</p>
+<p>其实不能过度依赖，毕竟和实际的评测环境还是有区别的，但是看到自己设计的cpu确实经过大规模数据测试Accepted还是有点小开心的</p>
+<h2 id="扩展尝试"><a href="#扩展尝试" class="headerlink" title="扩展尝试"></a>扩展尝试</h2><p>鸽鸽鸽</p>
+<p>留好端口方便实现。</p>
+<h2 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h2><h3 id="1-第一题"><a href="#1-第一题" class="headerlink" title="1. 第一题"></a>1. 第一题</h3><blockquote>
+<p>上面我们介绍了通过 FSM 理解单周期 CPU 的基本方法。请大家指出单周期 CPU 所用到的模块中，哪些发挥状态存储功能，哪些发挥状态转移功能。</p>
+</blockquote>
+<p>上游（Moore机）：PC存储状态，输出取指令地址，经过跳转单元（若无跳转则为与 4 Add）得到下一次状态。</p>
+<p>下游（Mealy机）：可以理解为通用寄存器堆（GRF）作为状态存储单元，由指令（经过spiltter处理）作为输入信号（经过Controller生成控制信号形成最终的输入信号），控制着从GRF取值、控制ALU输出值，而写入信号与输出值共同控制状态转移</p>
+<h3 id="2-第二题"><a href="#2-第二题" class="headerlink" title="2.第二题"></a>2.第二题</h3><blockquote>
+<p>现在我们的模块中 IM 使用 ROM，DM 使用 RAM，GRF 使用 Register，这种做法合理吗？ 请给出分析，若有改进意见也请一并给出。</p>
+</blockquote>
+<p>合理，IM在程序运行过程不会修改，所以选择ROM，而DM需要支持读出和写入，选择RAM，二者都需要多地址存储。而GRF是通用寄存器堆，用Register更方便，也更容易改装（如对$0始终保持0的改装）。</p>
+<h3 id="3-第三题"><a href="#3-第三题" class="headerlink" title="3.第三题"></a>3.第三题</h3><blockquote>
+<p>在上述提示的模块之外，你是否在实际实现时设计了其他的模块？如果是的话，请给出介绍和设计的思路。</p>
+</blockquote>
+<p>我实现了Rdecoder，其功能是针对R型指令将func码转化成对应的ALUOp，具体细节参考上文Controller部分，补充下设计思路：使用和Controller类似的与门阵列，在连线时将输入调整成111111，可以降低连错的概率</p>
+<h3 id="4-第四题"><a href="#4-第四题" class="headerlink" title="4.第四题"></a>4.第四题</h3><blockquote>
+<p>事实上，实现 nop 空指令，我们并不需要将它加入控制信号真值表，为什么？</p>
+</blockquote>
+<p>因为nop不对任何存储单元操作（PC是自增，即使没有nop也会进行），因此nop没有相对应的控制信号</p>
+<h3 id="5-第五题"><a href="#5-第五题" class="headerlink" title="5.第五题"></a>5.第五题</h3><blockquote>
+<p>阅读 Pre 的“MIPS 指令集及汇编语言”一节中给出的测试样例，评价其强度（可从各个指令的覆盖情况，单一指令各种行为的覆盖情况等方面分析），并指出具体的不足之处。</p>
+</blockquote>
+<p><del>挺强的</del></p>
+<p>覆盖情况：缺少sub和nop，没有实现全覆盖</p>
+<p>测试强度：</p>
+<p>(1) I型指令：lui已经得到充分测试，但ori没有涉及检查0扩展和sign扩展（唯一一次用的是和0xffff0000，两种扩展结果相同），因此可以增加相应指令。<br>lw 和 sw 有涉及，但是没有考虑 offset 为负数的情况，混合测试 2 中包含了这一点<br>同样的，beq没有涉及 offset 为负数的情况，因此我考虑用 <code>beq $0,$0,back</code> 来检查是否能正常回溯。<br>(2) R型指令：由于 add 和 sub 只考虑无符号，因此直接加减即可。</p>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="指令集"><a href="#指令集" class="headerlink" title="指令集"></a>指令集</h3><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/add.png"
+                      alt="add"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/sub.png"
+                      alt="sub"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/ori.png"
+                      alt="ori"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/lw.png"
+                      alt="lw"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/sw.png"
+                      alt="sw"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/beq.png"
+                      alt="beq"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/lui.png"
+                      alt="lui"
+                ></p>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> 计组P3——单周期CPULogisim实现</li>
+        <li><strong>Author:</strong> rippor(null)</li>
+        <li><strong>Created at
+                :</strong> 2025-10-28 12:39:00</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2025-11-03 09:26:58
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://redefine.ohevan.com/2025/10/28/COP3/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Logisim-%E5%8D%95%E5%91%A8%E6%9C%9FCPU/">#Logisim,单周期CPU</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2025/10/21/COP2/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">计组P2——学会当好的编译器</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+                    lang: 'zh-CN',
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+		</div>
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">On this page</div>
+		<div class="page-title">计组P3——单周期CPULogisim实现</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E7%BB%88%E5%B1%95%E7%A4%BA"><span class="nav-text">最终展示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E8%8D%89%E7%A8%BF"><span class="nav-text">设计草稿</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E5%88%86%E6%9E%90-%E6%95%B0%E6%8D%AE%E9%80%9A%E8%B7%AF"><span class="nav-text">指令分析(数据通路)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E5%88%B6%E4%BD%9C"><span class="nav-text">模块制作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88"><span class="nav-text">测试方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-ori-%E5%92%8C-sw"><span class="nav-text">1.ori 和 sw</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%B7%B7%E5%90%88%E6%B5%8B%E8%AF%951"><span class="nav-text">2. 混合测试1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%B7%B7%E5%90%88%E6%B5%8B%E8%AF%952"><span class="nav-text">3.混合测试2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%B7%B7%E5%90%88%E6%B5%8B%E8%AF%953"><span class="nav-text">4.混合测试3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E6%B5%8B%E8%AF%84%E6%9C%BA%E5%AF%B9%E6%8B%8D"><span class="nav-text">5.测评机对拍</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E5%B0%9D%E8%AF%95"><span class="nav-text">扩展尝试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98"><span class="nav-text">思考题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%AC%AC%E4%B8%80%E9%A2%98"><span class="nav-text">1. 第一题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%AC%AC%E4%BA%8C%E9%A2%98"><span class="nav-text">2.第二题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E7%AC%AC%E4%B8%89%E9%A2%98"><span class="nav-text">3.第三题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E7%AC%AC%E5%9B%9B%E9%A2%98"><span class="nav-text">4.第四题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E7%AC%AC%E4%BA%94%E9%A2%98"><span class="nav-text">5.第五题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="nav-text">指令集</span></a></li></ol></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2025&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">rippor(null)</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        6 posts in total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.5</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="Search..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+
+<script src="/js/build/libs/Swup.min.js"></script>
+
+<script src="/js/build/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/build/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/build/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	
+<script src="/js/build/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/build/utils.js" type="module"></script>
+
+<script src="/js/build/main.js" type="module"></script>
+
+<script src="/js/build/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/build/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/build/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/build/layouts/categoryList.js" type="module"></script>
+
+
+
+    
+<script src="/js/build/tools/localSearch.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/build/tools/runtime.js"></script>
+
+    
+<script src="/js/build/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/build/libs/Typed.min.js"></script>
+
+  
+<script src="/js/build/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+    
+<script src="/js/build/libs/anime.min.js"></script>
+
+
+
+
+
+    
+<script src="/js/build/tools/tocToggle.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/layouts/toc.js" type="module" data-swup-reload-script=""></script>
+
+<script src="/js/build/plugins/tabs.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+<script src="/js/build/libs/moment-with-locales.min.js" data-swup-reload-script=""></script>
+
+
+<script src="/js/build/layouts/essays.js" type="module" data-swup-reload-script=""></script>
+
+
+
+
+
+	
+</body>
+
+</html>
