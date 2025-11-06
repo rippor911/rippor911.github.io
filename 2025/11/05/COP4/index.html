@@ -140,7 +140,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/images/redefine-og.webp">
 <meta property="article:published_time" content="2025-11-05T00:29:33.000Z">
-<meta property="article:modified_time" content="2025-11-06T14:18:56.614Z">
+<meta property="article:modified_time" content="2025-11-06T15:21:47.773Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Verilog">
 <meta property="article:tag" content="单周期CPU">
@@ -549,8 +549,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-06 22:18:56</span>
-            <span class="mobile">2025-11-06 22:18:56</span>
+            <span class="desktop">2025-11-06 23:21:47</span>
+            <span class="mobile">2025-11-06 23:21:47</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -963,6 +963,110 @@
     </div>
   </div>
 
+<p>这里列出所有的 choose 信号对应的含义：</p>
+<table>
+<thead>
+<tr>
+<th>choose</th>
+<th>000</th>
+<th>001</th>
+<th>010</th>
+<th>011</th>
+<th>100</th>
+<th>101</th>
+<th>110</th>
+<th>111</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>rd1</td>
+<td>rs</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>rd2</td>
+<td>rt</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>wt</td>
+<td>rd</td>
+<td>rt</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>wdata</td>
+<td>aluOut</td>
+<td>memOut</td>
+<td>pc</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>A</td>
+<td>GPR[rd1]</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>B</td>
+<td>GPR[rd2]</td>
+<td>immZeroExt</td>
+<td>immSignExt</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>memAdr</td>
+<td>aluOut</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>memWdata</td>
+<td>GPR[rd2]</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody></table>
 <h2 id="测试方案"><a href="#测试方案" class="headerlink" title="测试方案"></a>测试方案</h2><h3 id="模块测试"><a href="#模块测试" class="headerlink" title="模块测试"></a>模块测试</h3><h4 id="mux-test"><a href="#mux-test" class="headerlink" title="mux_test"></a>mux_test</h4><div class="code-container" data-rel="Verilog"><figure class="iseeu highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> mux32_test;</span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        <span class="comment">// Initialize Inputs</span></span><br><span class="line">        choose = <span class="number">0</span>;</span><br><span class="line">        input0 = <span class="number">1</span>;</span><br><span class="line">        input1 = <span class="number">2</span>;</span><br><span class="line">        input2 = <span class="number">3</span>;</span><br><span class="line">        input3 = <span class="number">4</span>;</span><br><span class="line">        input4 = <span class="number">5</span>;</span><br><span class="line">        input5 = <span class="number">6</span>;</span><br><span class="line">        input6 = <span class="number">7</span>;</span><br><span class="line">        input7 = <span class="number">8</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> #<span class="number">10</span> choose = choose + <span class="number">1</span>;</span><br><span class="line">      </span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure></div>
 
 <h4 id="pc-test"><a href="#pc-test" class="headerlink" title="pc_test"></a>pc_test</h4><div class="code-container" data-rel="Verilog"><figure class="iseeu highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">  <span class="comment">// Initialize Inputs</span></span><br><span class="line">  clk = <span class="number">0</span>;</span><br><span class="line">  reset = <span class="number">1</span>;</span><br><span class="line">  npc = <span class="number">0</span>;</span><br><span class="line">  </span><br><span class="line">  #<span class="number">10</span> reset = <span class="number">0</span>;</span><br><span class="line"> <span class="keyword">end</span></span><br><span class="line"> </span><br><span class="line"> <span class="keyword">always</span> #<span class="number">5</span> clk = ~clk;</span><br><span class="line"> </span><br><span class="line"> <span class="keyword">always</span> #<span class="number">10</span> npc = npc + <span class="number">1</span>;</span><br><span class="line">      </span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure></div>
@@ -1043,7 +1147,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2025-11-06 22:18:56
+                    :</strong> 2025-11-06 23:21:47
             </li>
         
         <li>
