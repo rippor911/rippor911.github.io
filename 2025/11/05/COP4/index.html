@@ -140,7 +140,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/images/redefine-og.webp">
 <meta property="article:published_time" content="2025-11-05T00:29:33.000Z">
-<meta property="article:modified_time" content="2025-11-06T15:21:47.773Z">
+<meta property="article:modified_time" content="2025-11-06T16:07:56.723Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Verilog">
 <meta property="article:tag" content="单周期CPU">
@@ -549,8 +549,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-06 23:21:47</span>
-            <span class="mobile">2025-11-06 23:21:47</span>
+            <span class="desktop">2025-11-07 00:07:56</span>
+            <span class="mobile">2025-11-07 00:07:56</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -1004,7 +1004,7 @@
 <td>wt</td>
 <td>rd</td>
 <td>rt</td>
-<td>-</td>
+<td>5’d31</td>
 <td>-</td>
 <td>-</td>
 <td>-</td>
@@ -1015,7 +1015,7 @@
 <td>wdata</td>
 <td>aluOut</td>
 <td>memOut</td>
-<td>pc</td>
+<td>-</td>
 <td>-</td>
 <td>-</td>
 <td>-</td>
@@ -1025,7 +1025,7 @@
 <tr>
 <td>A</td>
 <td>GPR[rd1]</td>
-<td>-</td>
+<td>pc</td>
 <td>-</td>
 <td>-</td>
 <td>-</td>
@@ -1038,7 +1038,7 @@
 <td>GPR[rd2]</td>
 <td>immZeroExt</td>
 <td>immSignExt</td>
-<td>-</td>
+<td>32’d4</td>
 <td>-</td>
 <td>-</td>
 <td>-</td>
@@ -1075,7 +1075,7 @@
 
 <h4 id="splitter-test"><a href="#splitter-test" class="headerlink" title="splitter_test"></a>splitter_test</h4><div class="code-container" data-rel="Verilog"><figure class="iseeu highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line"> instr = <span class="number">0</span>;</span><br><span class="line"> #<span class="number">20</span> instr = <span class="number">32&#x27;h012a5020</span>; <span class="comment">//add  : 0x012a5020</span></span><br><span class="line"> #<span class="number">20</span> instr = <span class="number">32&#x27;h016d5822</span>; <span class="comment">//sub  : 0x016d5822  </span></span><br><span class="line"> #<span class="number">20</span> instr = <span class="number">32&#x27;h356b7f3c</span>; <span class="comment">//ori  : 0x356b7f3c</span></span><br><span class="line"> #<span class="number">20</span> instr = <span class="number">32&#x27;h8d2c1234</span>; <span class="comment">//lw   : 0x8d2c1234</span></span><br><span class="line"> #<span class="number">20</span> instr = <span class="number">32&#x27;had4c5678</span>; <span class="comment">//sw   : 0xad4c5678</span></span><br><span class="line"> #<span class="number">20</span> instr = <span class="number">32&#x27;h11229abc</span>; <span class="comment">//beq  : 0x11229abc</span></span><br><span class="line"> #<span class="number">20</span> instr = <span class="number">32&#x27;h3c01def0</span>; <span class="comment">//lui  : 0x3c01def0</span></span><br><span class="line"> #<span class="number">20</span> instr = <span class="number">32&#x27;h0c123456</span>; <span class="comment">//jal  : 0x0c123456</span></span><br><span class="line"> #<span class="number">20</span> instr = <span class="number">32&#x27;h02a00008</span>; <span class="comment">//jr   : 0x02a00008</span></span><br><span class="line"> #<span class="number">20</span> instr = <span class="number">32&#x27;h00000000</span>; <span class="comment">//nop  : 0x00000000</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></div>
 
-<h3 id="grf-test"><a href="#grf-test" class="headerlink" title="grf_test"></a>grf_test</h3><div class="code-container" data-rel="Verilog"><figure class="iseeu highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line"> clk = <span class="number">0</span>;</span><br><span class="line"> reset = <span class="number">1</span>;</span><br><span class="line"> rd1 = <span class="number">0</span>;</span><br><span class="line"> rd2 = <span class="number">0</span>;</span><br><span class="line"> wt = <span class="number">0</span>;</span><br><span class="line"> WE = <span class="number">0</span>;</span><br><span class="line"> wdata = <span class="number">32</span>;</span><br><span class="line"></span><br><span class="line"> #<span class="number">20</span> reset = <span class="number">0</span>;</span><br><span class="line">   rd1 = <span class="number">1</span>;</span><br><span class="line">   rd2 = <span class="number">2</span>;</span><br><span class="line">   wt = <span class="number">0</span>;</span><br><span class="line">   WE = <span class="number">1</span>;</span><br><span class="line"> #<span class="number">20</span> </span><br><span class="line">   rd1 = <span class="number">0</span>; <span class="comment">//$0 can&#x27;t be modified</span></span><br><span class="line">   rd2 = <span class="number">3</span>; <span class="comment">//$3 can   be modified</span></span><br><span class="line">   wt = <span class="number">3</span>;</span><br><span class="line">   WE = <span class="number">1</span>;  </span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">always</span> #<span class="number">10</span> clk = ~clk;</span><br></pre></td></tr></table></figure></div>
+<h4 id="grf-test"><a href="#grf-test" class="headerlink" title="grf_test"></a>grf_test</h4><div class="code-container" data-rel="Verilog"><figure class="iseeu highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line"> clk = <span class="number">0</span>;</span><br><span class="line"> reset = <span class="number">1</span>;</span><br><span class="line"> rd1 = <span class="number">0</span>;</span><br><span class="line"> rd2 = <span class="number">0</span>;</span><br><span class="line"> wt = <span class="number">0</span>;</span><br><span class="line"> WE = <span class="number">0</span>;</span><br><span class="line"> wdata = <span class="number">32</span>;</span><br><span class="line"></span><br><span class="line"> #<span class="number">20</span> reset = <span class="number">0</span>;</span><br><span class="line">   rd1 = <span class="number">1</span>;</span><br><span class="line">   rd2 = <span class="number">2</span>;</span><br><span class="line">   wt = <span class="number">0</span>;</span><br><span class="line">   WE = <span class="number">1</span>;</span><br><span class="line"> #<span class="number">20</span> </span><br><span class="line">   rd1 = <span class="number">0</span>; <span class="comment">//$0 can&#x27;t be modified</span></span><br><span class="line">   rd2 = <span class="number">3</span>; <span class="comment">//$3 can   be modified</span></span><br><span class="line">   wt = <span class="number">3</span>;</span><br><span class="line">   WE = <span class="number">1</span>;  </span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">always</span> #<span class="number">10</span> clk = ~clk;</span><br></pre></td></tr></table></figure></div>
 
 <h4 id="alu-test"><a href="#alu-test" class="headerlink" title="alu_test"></a>alu_test</h4><div class="code-container" data-rel="Verilog"><figure class="iseeu highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line"> <span class="comment">// Initialize Inputs</span></span><br><span class="line"> aluOp = <span class="number">0</span>;</span><br><span class="line"> A = <span class="number">32&#x27;h11ac5670</span>;</span><br><span class="line"> B = <span class="number">32&#x27;ha1ac5670</span>;</span><br><span class="line"> #<span class="number">40</span> A = B;</span><br><span class="line"></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">always</span> #<span class="number">10</span> aluOp = aluOp + <span class="number">1</span>;</span><br></pre></td></tr></table></figure></div>
 
@@ -1147,7 +1147,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2025-11-06 23:21:47
+                    :</strong> 2025-11-07 00:07:56
             </li>
         
         <li>
@@ -1255,7 +1255,7 @@
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
 		<div class="page-title">COP4</div>
-		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E8%8D%89%E7%A8%BF"><span class="nav-text">设计草稿</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1"><span class="nav-text">模块设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88"><span class="nav-text">测试方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E6%B5%8B%E8%AF%95"><span class="nav-text">模块测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#grf-test"><span class="nav-text">grf_test</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98"><span class="nav-text">思考题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="nav-text">指令集</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E8%8D%89%E7%A8%BF"><span class="nav-text">设计草稿</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1"><span class="nav-text">模块设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88"><span class="nav-text">测试方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E6%B5%8B%E8%AF%95"><span class="nav-text">模块测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98"><span class="nav-text">思考题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="nav-text">指令集</span></a></li></ol></li></ol>
 
 	</div>
 </div>
