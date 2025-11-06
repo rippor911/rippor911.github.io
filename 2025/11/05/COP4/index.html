@@ -140,10 +140,10 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/images/redefine-og.webp">
 <meta property="article:published_time" content="2025-11-05T00:29:33.000Z">
-<meta property="article:modified_time" content="2025-11-05T03:56:23.925Z">
+<meta property="article:modified_time" content="2025-11-06T13:30:39.224Z">
 <meta property="article:author" content="John Doe">
-<meta property="article:tag" content="Verilog">
 <meta property="article:tag" content="单周期CPU">
+<meta property="article:tag" content="Verilog">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/images/redefine-og.webp">
     
@@ -549,8 +549,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-05 11:56:23</span>
-            <span class="mobile">2025-11-05 11:56:23</span>
+            <span class="desktop">2025-11-06 21:30:39</span>
+            <span class="mobile">2025-11-06 21:30:39</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -562,11 +562,11 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/Verilog/">Verilog</a>&nbsp;
+                        <a href="/tags/%E5%8D%95%E5%91%A8%E6%9C%9FCPU/">单周期CPU</a>&nbsp;
                     </li>
                 
                     <li>
-                        | <a href="/tags/%E5%8D%95%E5%91%A8%E6%9C%9FCPU/">单周期CPU</a>&nbsp;
+                        | <a href="/tags/Verilog/">Verilog</a>&nbsp;
                     </li>
                 
             </ul>
@@ -616,10 +616,11 @@
 
     npc {
         input logicOutput
+        input[2_0]  mode
         input[31_0] pc
         input[31_0] immSignExt
         input[25_0] instr_index
-        input[2_0]  mode
+        input[31_0] aluOut
         output[31_0] npc
     }
 
@@ -733,6 +734,7 @@
 
     alu ||--o{ muxGrfWdata : aluOut
     alu ||--o{ muxMemAdr : aluOut
+    alu ||--o{ npc : aluOut
     alu ||--o{ npc : logicOutput
 
     muxA {
@@ -762,7 +764,7 @@
     muxMemAdr ||--o{ mem : memAdr
 
     muxMemWdata {
-        input[31_0] memWdataChoose
+        input[2_0] memWdataChoose
         input[31_0] GPR[rt]
         output[31_0] memWdata
     }
@@ -790,7 +792,182 @@
     ext ||--o{ muxB : immSignExt 
     ext ||--o{ npc : immSignExt</pre>
 
-<h2 id="测试方案"><a href="#测试方案" class="headerlink" title="测试方案"></a>测试方案</h2><h2 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h2>
+<p>总的来说，摒弃了P3中权责暧昧的设计，将所有控制信号完全交由controller进行控制，其他模块只管根据选择信号进行相应操作即可</p>
+<h3 id="模块设计"><a href="#模块设计" class="headerlink" title="模块设计"></a>模块设计</h3><h4 id="mux"><a href="#mux" class="headerlink" title="mux"></a>mux</h4><p>为了便于扩展，每个选择器都设置为三位选择信号，由controller统一发出</p>
+<h4 id="pc-and-im"><a href="#pc-and-im" class="headerlink" title="pc and im"></a>pc and im</h4><table>
+<thead>
+<tr>
+<th>def</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>input</td>
+<td>clk</td>
+</tr>
+<tr>
+<td>input</td>
+<td>reset</td>
+</tr>
+<tr>
+<td>input[31:0]</td>
+<td>npc</td>
+</tr>
+<tr>
+<td>output[31:0]</td>
+<td>pc</td>
+</tr>
+</tbody></table>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@ posedge clk </span><br><span class="line">    if reset == 1:</span><br><span class="line">        pc &lt;= 32&#x27;h00003000</span><br><span class="line">    else:</span><br><span class="line">        pc &lt;= npc</span><br></pre></td></tr></table></figure></div>
+
+<p>im需要注意：</p>
+<div class="code-container" data-rel="Verilog"><figure class="iseeu highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">reg</span> [<span class="number">31</span>:<span class="number">0</span>] im_reg [<span class="number">0</span>:<span class="number">4095</span>]; <span class="comment">//4096个元素，每个元素是32位，注意数组大小是从小到大</span></span><br><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">    <span class="built_in">$readmemh</span>(<span class="string">&quot;code.txt&quot;</span>, im_reg);</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">assign</span> id = adr - <span class="number">32&#x27;h00003000</span>;</span><br><span class="line"><span class="keyword">assign</span> instr = im_reg[id[<span class="number">31</span>:<span class="number">2</span>]];</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="npc"><a href="#npc" class="headerlink" title="npc"></a>npc</h4><table>
+<thead>
+<tr>
+<th>def</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>input</td>
+<td>logicOut</td>
+</tr>
+<tr>
+<td>input[2:0]</td>
+<td>mode</td>
+</tr>
+<tr>
+<td>input[31:0]</td>
+<td>pc</td>
+</tr>
+<tr>
+<td>input[31:0]</td>
+<td>immSignExt</td>
+</tr>
+<tr>
+<td>input[25:0]</td>
+<td>instr_index</td>
+</tr>
+<tr>
+<td>input[31:0]</td>
+<td>aluOut</td>
+</tr>
+<tr>
+<td>output[31:0]</td>
+<td>npc</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>mode</th>
+<th>function</th>
+<th>relevant</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>000</td>
+<td>npc &#x3D; pc + 4</td>
+<td>-</td>
+</tr>
+<tr>
+<td>001</td>
+<td>logic jump mode</td>
+<td>beq</td>
+</tr>
+<tr>
+<td>010</td>
+<td>j instr mode</td>
+<td>jal</td>
+</tr>
+<tr>
+<td>011</td>
+<td>jr mode</td>
+<td>jr</td>
+</tr>
+</tbody></table>
+<p>jr、jalr 可以看成是 add 指令的延展，因为指令中的 rt 都是 $0 ,做加法后不影响结果，jalr 还可以直接合并数据通路写入 rd</p>
+<h4 id="splitter"><a href="#splitter" class="headerlink" title="splitter"></a>splitter</h4><p>按照 R 、 I 、 J 三种方法区分出所有的信号即可</p>
+<h4 id="grf"><a href="#grf" class="headerlink" title="grf"></a>grf</h4>
+  <div class="note-large blue">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>Notice：</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <p>不修改 $0</p>
+<p>同步复位，上升沿修改，同时输出修改信息</p>
+
+    </div>
+  </div>
+
+<h2 id="测试方案"><a href="#测试方案" class="headerlink" title="测试方案"></a>测试方案</h2><h3 id="模块测试"><a href="#模块测试" class="headerlink" title="模块测试"></a>模块测试</h3><h4 id="mux-test"><a href="#mux-test" class="headerlink" title="mux_test"></a>mux_test</h4><div class="code-container" data-rel="Verilog"><figure class="iseeu highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> mux32_test;</span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        <span class="comment">// Initialize Inputs</span></span><br><span class="line">        choose = <span class="number">0</span>;</span><br><span class="line">        input0 = <span class="number">1</span>;</span><br><span class="line">        input1 = <span class="number">2</span>;</span><br><span class="line">        input2 = <span class="number">3</span>;</span><br><span class="line">        input3 = <span class="number">4</span>;</span><br><span class="line">        input4 = <span class="number">5</span>;</span><br><span class="line">        input5 = <span class="number">6</span>;</span><br><span class="line">        input6 = <span class="number">7</span>;</span><br><span class="line">        input7 = <span class="number">8</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> #<span class="number">10</span> choose = choose + <span class="number">1</span>;</span><br><span class="line">      </span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure></div>
+
+<h4 id="pc-test"><a href="#pc-test" class="headerlink" title="pc_test"></a>pc_test</h4><div class="code-container" data-rel="Verilog"><figure class="iseeu highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">  <span class="comment">// Initialize Inputs</span></span><br><span class="line">  clk = <span class="number">0</span>;</span><br><span class="line">  reset = <span class="number">1</span>;</span><br><span class="line">  npc = <span class="number">0</span>;</span><br><span class="line">  </span><br><span class="line">  #<span class="number">10</span> reset = <span class="number">0</span>;</span><br><span class="line"> <span class="keyword">end</span></span><br><span class="line"> </span><br><span class="line"> <span class="keyword">always</span> #<span class="number">5</span> clk = ~clk;</span><br><span class="line"> </span><br><span class="line"> <span class="keyword">always</span> #<span class="number">10</span> npc = npc + <span class="number">1</span>;</span><br><span class="line">      </span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure></div>
+
+<h4 id="npc-test"><a href="#npc-test" class="headerlink" title="npc_test"></a>npc_test</h4><div class="code-container" data-rel="Verilog"><figure class="iseeu highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line"> <span class="comment">// Initialize Inputs</span></span><br><span class="line"> logicOutput = <span class="number">0</span>;</span><br><span class="line"> mode = <span class="number">0</span>;</span><br><span class="line"> pc = <span class="number">32&#x27;h1f000004</span>;</span><br><span class="line"> immSignExt = <span class="number">2</span>;</span><br><span class="line"> instr_index = <span class="number">26</span>;</span><br><span class="line"> aluOut = <span class="number">32</span>;</span><br><span class="line"></span><br><span class="line"> #<span class="number">30</span> logicOutput = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">always</span> #<span class="number">20</span> mode = mode + <span class="number">1</span>;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="splitter-test"><a href="#splitter-test" class="headerlink" title="splitter_test"></a>splitter_test</h4><div class="code-container" data-rel="Verilog"><figure class="iseeu highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line"> instr = <span class="number">0</span>;</span><br><span class="line"> #<span class="number">20</span> instr = <span class="number">32&#x27;h012a5020</span>; <span class="comment">//add  : 0x012a5020</span></span><br><span class="line"> #<span class="number">20</span> instr = <span class="number">32&#x27;h016d5822</span>; <span class="comment">//sub  : 0x016d5822  </span></span><br><span class="line"> #<span class="number">20</span> instr = <span class="number">32&#x27;h356b7f3c</span>; <span class="comment">//ori  : 0x356b7f3c</span></span><br><span class="line"> #<span class="number">20</span> instr = <span class="number">32&#x27;h8d2c1234</span>; <span class="comment">//lw   : 0x8d2c1234</span></span><br><span class="line"> #<span class="number">20</span> instr = <span class="number">32&#x27;had4c5678</span>; <span class="comment">//sw   : 0xad4c5678</span></span><br><span class="line"> #<span class="number">20</span> instr = <span class="number">32&#x27;h11229abc</span>; <span class="comment">//beq  : 0x11229abc</span></span><br><span class="line"> #<span class="number">20</span> instr = <span class="number">32&#x27;h3c01def0</span>; <span class="comment">//lui  : 0x3c01def0</span></span><br><span class="line"> #<span class="number">20</span> instr = <span class="number">32&#x27;h0c123456</span>; <span class="comment">//jal  : 0x0c123456</span></span><br><span class="line"> #<span class="number">20</span> instr = <span class="number">32&#x27;h02a00008</span>; <span class="comment">//jr   : 0x02a00008</span></span><br><span class="line"> #<span class="number">20</span> instr = <span class="number">32&#x27;h00000000</span>; <span class="comment">//nop  : 0x00000000</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="grf-test"><a href="#grf-test" class="headerlink" title="grf_test"></a>grf_test</h3><div class="code-container" data-rel="Verilog"><figure class="iseeu highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line"> clk = <span class="number">0</span>;</span><br><span class="line"> reset = <span class="number">1</span>;</span><br><span class="line"> rd1 = <span class="number">0</span>;</span><br><span class="line"> rd2 = <span class="number">0</span>;</span><br><span class="line"> wt = <span class="number">0</span>;</span><br><span class="line"> WE = <span class="number">0</span>;</span><br><span class="line"> wdata = <span class="number">32</span>;</span><br><span class="line"></span><br><span class="line"> #<span class="number">20</span> reset = <span class="number">0</span>;</span><br><span class="line">   rd1 = <span class="number">1</span>;</span><br><span class="line">   rd2 = <span class="number">2</span>;</span><br><span class="line">   wt = <span class="number">0</span>;</span><br><span class="line">   WE = <span class="number">1</span>;</span><br><span class="line"> #<span class="number">20</span> </span><br><span class="line">   rd1 = <span class="number">0</span>; <span class="comment">//$0 can&#x27;t be modified</span></span><br><span class="line">   rd2 = <span class="number">3</span>; <span class="comment">//$3 can   be modified</span></span><br><span class="line">   wt = <span class="number">3</span>;</span><br><span class="line">   WE = <span class="number">1</span>;  </span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">always</span> #<span class="number">10</span> clk = ~clk;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h2><h3 id="指令集"><a href="#指令集" class="headerlink" title="指令集"></a>指令集</h3><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/add.png"
+                      alt="add"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/sub.png"
+                      alt="sub"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/ori.png"
+                      alt="ori"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/lw.png"
+                      alt="lw"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/sw.png"
+                      alt="sw"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/beq.png"
+                      alt="beq"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/lui.png"
+                      alt="lui"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/jr.png"
+                      alt="jr"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/jal.png"
+                      alt="jal"
+                ></p>
+
 		</div>
 
 		
@@ -804,7 +981,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2025-11-05 11:56:23
+                    :</strong> 2025-11-06 21:30:39
             </li>
         
         <li>
@@ -830,11 +1007,11 @@
 		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/Verilog/">#Verilog</a>&nbsp;
+				<a href="/tags/%E5%8D%95%E5%91%A8%E6%9C%9FCPU/">#单周期CPU</a>&nbsp;
 			</li>
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/%E5%8D%95%E5%91%A8%E6%9C%9FCPU/">#单周期CPU</a>&nbsp;
+				<a href="/tags/Verilog/">#Verilog</a>&nbsp;
 			</li>
 			
 		</ul>
@@ -912,7 +1089,7 @@
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
 		<div class="page-title">COP4</div>
-		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E8%8D%89%E7%A8%BF"><span class="nav-text">设计草稿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88"><span class="nav-text">测试方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98"><span class="nav-text">思考题</span></a></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E8%8D%89%E7%A8%BF"><span class="nav-text">设计草稿</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1"><span class="nav-text">模块设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88"><span class="nav-text">测试方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E6%B5%8B%E8%AF%95"><span class="nav-text">模块测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#grf-test"><span class="nav-text">grf_test</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98"><span class="nav-text">思考题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="nav-text">指令集</span></a></li></ol></li></ol>
 
 	</div>
 </div>
