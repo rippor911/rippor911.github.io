@@ -140,7 +140,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/images/redefine-og.webp">
 <meta property="article:published_time" content="2025-11-05T00:29:33.000Z">
-<meta property="article:modified_time" content="2025-11-06T16:07:56.723Z">
+<meta property="article:modified_time" content="2025-11-07T03:32:35.662Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Verilog">
 <meta property="article:tag" content="单周期CPU">
@@ -549,8 +549,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-07 00:07:56</span>
-            <span class="mobile">2025-11-07 00:07:56</span>
+            <span class="desktop">2025-11-07 11:32:35</span>
+            <span class="mobile">2025-11-07 11:32:35</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -576,12 +576,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.3k Words</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2.2k Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>6 Mins</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>10 Mins</span>
         </span>
     
     
@@ -1075,6 +1075,9 @@
 <td>-</td>
 </tr>
 </tbody></table>
+<h3 id="通路设计"><a href="#通路设计" class="headerlink" title="通路设计"></a>通路设计</h3><p>按照总图把相应接口接起来即可。</p>
+<h2 id="指令添加路径"><a href="#指令添加路径" class="headerlink" title="指令添加路径"></a>指令添加路径</h2><p>分为常规的 R、I、J型指令，以及一些奇奇怪怪的指令</p>
+<h3 id="1-R-type"><a href="#1-R-type" class="headerlink" title="1.R-type"></a>1.R-type</h3><h3 id="2-I-type"><a href="#2-I-type" class="headerlink" title="2.I-type"></a>2.I-type</h3><h3 id="3-J-type"><a href="#3-J-type" class="headerlink" title="3.J-type"></a>3.J-type</h3><h3 id="4-odd-type"><a href="#4-odd-type" class="headerlink" title="4.odd-type"></a>4.odd-type</h3><p>鸽鸽鸽……</p>
 <h2 id="测试方案"><a href="#测试方案" class="headerlink" title="测试方案"></a>测试方案</h2><h3 id="模块测试"><a href="#模块测试" class="headerlink" title="模块测试"></a>模块测试</h3><h4 id="mux-test"><a href="#mux-test" class="headerlink" title="mux_test"></a>mux_test</h4><div class="code-container" data-rel="Verilog"><figure class="iseeu highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> mux32_test;</span><br><span class="line">    <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">        <span class="comment">// Initialize Inputs</span></span><br><span class="line">        choose = <span class="number">0</span>;</span><br><span class="line">        input0 = <span class="number">1</span>;</span><br><span class="line">        input1 = <span class="number">2</span>;</span><br><span class="line">        input2 = <span class="number">3</span>;</span><br><span class="line">        input3 = <span class="number">4</span>;</span><br><span class="line">        input4 = <span class="number">5</span>;</span><br><span class="line">        input5 = <span class="number">6</span>;</span><br><span class="line">        input6 = <span class="number">7</span>;</span><br><span class="line">        input7 = <span class="number">8</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">always</span> #<span class="number">10</span> choose = choose + <span class="number">1</span>;</span><br><span class="line">      </span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure></div>
 
 <h4 id="pc-test"><a href="#pc-test" class="headerlink" title="pc_test"></a>pc_test</h4><div class="code-container" data-rel="Verilog"><figure class="iseeu highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line">  <span class="comment">// Initialize Inputs</span></span><br><span class="line">  clk = <span class="number">0</span>;</span><br><span class="line">  reset = <span class="number">1</span>;</span><br><span class="line">  npc = <span class="number">0</span>;</span><br><span class="line">  </span><br><span class="line">  #<span class="number">10</span> reset = <span class="number">0</span>;</span><br><span class="line"> <span class="keyword">end</span></span><br><span class="line"> </span><br><span class="line"> <span class="keyword">always</span> #<span class="number">5</span> clk = ~clk;</span><br><span class="line"> </span><br><span class="line"> <span class="keyword">always</span> #<span class="number">10</span> npc = npc + <span class="number">1</span>;</span><br><span class="line">      </span><br><span class="line"><span class="keyword">endmodule</span></span><br></pre></td></tr></table></figure></div>
@@ -1087,7 +1090,62 @@
 
 <h4 id="alu-test"><a href="#alu-test" class="headerlink" title="alu_test"></a>alu_test</h4><div class="code-container" data-rel="Verilog"><figure class="iseeu highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">initial</span> <span class="keyword">begin</span></span><br><span class="line"> <span class="comment">// Initialize Inputs</span></span><br><span class="line"> aluOp = <span class="number">0</span>;</span><br><span class="line"> A = <span class="number">32&#x27;h11ac5670</span>;</span><br><span class="line"> B = <span class="number">32&#x27;ha1ac5670</span>;</span><br><span class="line"> #<span class="number">40</span> A = B;</span><br><span class="line"></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">always</span> #<span class="number">10</span> aluOp = aluOp + <span class="number">1</span>;</span><br></pre></td></tr></table></figure></div>
 
-<h2 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h2><h3 id="指令集"><a href="#指令集" class="headerlink" title="指令集"></a>指令集</h3><p><img  
+<h3 id="对拍测试"><a href="#对拍测试" class="headerlink" title="对拍测试"></a>对拍测试</h3><h2 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h2><h3 id="1-思考题1"><a href="#1-思考题1" class="headerlink" title="1.思考题1"></a>1.思考题1</h3><blockquote>
+<p>阅读下面给出的 DM 的输入示例中（示例 DM 容量为 4KB，即 32bit × 1024字），根据你的理解回答，这个 addr 信号又是从哪里来的？地址信号 addr 位数为什么是 [11:2] 而不是 [9:0] ？</p>
+</blockquote>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/dmAdrSecret.png"
+                      alt="dmAdrSecret"
+                ></p>
+<p>addr 信号是 GPR[base] 和 offset 经过 ALU 计算后得来的；因为内部采用 <code>[31:0] register</code> 存储每一个字，为了保证地址能被 4 整除，所以选择 [11:2] 而不是 [9:0]</p>
+<h3 id="2-思考题2"><a href="#2-思考题2" class="headerlink" title="2.思考题2"></a>2.思考题2</h3><blockquote>
+<p>至于表格的具体设计，则因人而异，可以<strong>记录下指令对应的控制信号如何取值</strong>，也可以<strong>记录下控制信号每种取值所对应的指令</strong>，在后面的 Project 中，这两种不同的译码方式将展现出各自的优劣，届时我们会再次对其进行详细分析。<br>思考上述两种控制器设计的译码方式，给出代码示例，并尝试对比各方式的优劣。</p>
+</blockquote>
+<p>第一种：</p>
+<div class="code-container" data-rel="Verilog"><figure class="iseeu highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">always</span> @(*) <span class="keyword">begin</span></span><br><span class="line">    <span class="keyword">if</span> (opcode == `special &amp;&amp; func == `add) <span class="keyword">begin</span></span><br><span class="line">        aluOp = `aluAdd;</span><br><span class="line">        muxA = `GPR[rs]</span><br><span class="line">        muxB = `GPR[rt]</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></div>
+
+<p>第二种：</p>
+<div class="code-container" data-rel="Verilog"><figure class="iseeu highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">assign</span> aluOp = ((opcode == `special &amp;&amp; func == `add) || (opcode == `sw) || (opcode == `lw)) ? `aluAdd :</span><br><span class="line">               (opcode == `special &amp;&amp; func == `sub) ? `aluSub :</span><br><span class="line">               (opcode == `ori) ? `aluOr :</span><br><span class="line">               `<span class="keyword">default</span>;</span><br></pre></td></tr></table></figure></div>
+
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>代码量（资源占用）</th>
+<th>指令间耦合度</th>
+<th>可读性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第一种</td>
+<td>多（因为某些信号需要在每条非定义指令中都被赋值为&#96;default）</td>
+<td>弱（相互独立）</td>
+<td>较好（可以对照指令表检查）</td>
+</tr>
+<tr>
+<td>第二种</td>
+<td>少</td>
+<td>强</td>
+<td>较差（需要对指令集有个整体观察）</td>
+</tr>
+</tbody></table>
+<p>个人更喜欢第一种，因为不会让指令耦合过强导致相互影响，维护和添加新指令比较简单，但是缺点也很明显，为了防止模式残留，最好将所有信号都在每个分支赋值（就P4而言，只需在含存储单元的部分设置即可）</p>
+<h3 id="3-思考题3"><a href="#3-思考题3" class="headerlink" title="3.思考题3"></a>3.思考题3</h3><blockquote>
+<p>在相应的部件中，复位信号的设计都是同步复位，这与 P3 中的设计要求不同。请对比同步复位与异步复位这两种方式的 reset 信号与 clk 信号优先级的关系。</p>
+</blockquote>
+<p>同步复位：clk &gt; reset（只有在 clk 上升沿，reset才发挥作用）</p>
+<p>异步复位：reset &gt; clk（指的是在复位时 clk 无法触发）</p>
+<h3 id="4-思考题4"><a href="#4-思考题4" class="headerlink" title="4.思考题4"></a>4.思考题4</h3><blockquote>
+<p>C 语言是一种弱类型程序设计语言。C 语言中不对计算结果溢出进行处理，这意味着 C 语言要求程序员必须很清楚计算结果是否会导致溢出。因此，如果仅仅支持 C 语言，MIPS 指令的所有计算指令均可以忽略溢出。 请说明为什么在忽略溢出的前提下，addi 与 addiu 是等价的，add 与 addu 是等价的。提示：阅读《MIPS32® Architecture For Programmers Volume II: The MIPS32® Instruction Set》中相关指令的 Operation 部分。</p>
+</blockquote>
+<p>addi 与 addiu 进行的计算都是 <code>GPR[rs] + immediate</code></p>
+<p>add 与 addu 进行的计算都是 <code>GPR[rs] + GPR[rt]</code></p>
+<p>只不过，addi 和 add 在发生溢出的时候，</p>
+<p><code>If the addition results in 32-bit 2’s complement arithmetic overflow, the destination register is not modified and an Integer Overflow exception occurs.</code></p>
+<p>只有当不溢出的情况下，才写入相应的寄存器，所以如果不考虑溢出，上述分支不会发生，则只会发生写入相应寄存器，则 addi 与 addiu 是等价的，add 与 addu 是等价的</p>
+<h3 id="指令集"><a href="#指令集" class="headerlink" title="指令集"></a>指令集</h3><p><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/../img/add.png"
@@ -1155,7 +1213,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2025-11-07 00:07:56
+                    :</strong> 2025-11-07 11:32:35
             </li>
         
         <li>
@@ -1263,7 +1321,7 @@
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
 		<div class="page-title">COP4</div>
-		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E8%8D%89%E7%A8%BF"><span class="nav-text">设计草稿</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1"><span class="nav-text">模块设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88"><span class="nav-text">测试方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E6%B5%8B%E8%AF%95"><span class="nav-text">模块测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98"><span class="nav-text">思考题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="nav-text">指令集</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E8%8D%89%E7%A8%BF"><span class="nav-text">设计草稿</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1"><span class="nav-text">模块设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%B7%AF%E8%AE%BE%E8%AE%A1"><span class="nav-text">通路设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E6%B7%BB%E5%8A%A0%E8%B7%AF%E5%BE%84"><span class="nav-text">指令添加路径</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-R-type"><span class="nav-text">1.R-type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-I-type"><span class="nav-text">2.I-type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-J-type"><span class="nav-text">3.J-type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-odd-type"><span class="nav-text">4.odd-type</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88"><span class="nav-text">测试方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E6%B5%8B%E8%AF%95"><span class="nav-text">模块测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%8B%8D%E6%B5%8B%E8%AF%95"><span class="nav-text">对拍测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98"><span class="nav-text">思考题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%80%9D%E8%80%83%E9%A2%981"><span class="nav-text">1.思考题1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%80%9D%E8%80%83%E9%A2%982"><span class="nav-text">2.思考题2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%80%9D%E8%80%83%E9%A2%983"><span class="nav-text">3.思考题3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%80%9D%E8%80%83%E9%A2%984"><span class="nav-text">4.思考题4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="nav-text">指令集</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -1294,7 +1352,7 @@
                     </span>
                     
                         <span>
-                            9.4k words in total
+                            10.3k words in total
                         </span>
                     
                 </p>
