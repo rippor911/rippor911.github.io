@@ -140,7 +140,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/images/redefine-og.webp">
 <meta property="article:published_time" content="2025-11-10T06:14:07.000Z">
-<meta property="article:modified_time" content="2025-11-13T09:36:25.159Z">
+<meta property="article:modified_time" content="2025-11-14T15:55:23.015Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Verilog">
 <meta property="article:tag" content="五层流水线CPU">
@@ -549,8 +549,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-13 17:36:25</span>
-            <span class="mobile">2025-11-13 17:36:25</span>
+            <span class="desktop">2025-11-14 23:55:23</span>
+            <span class="mobile">2025-11-14 23:55:23</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -576,12 +576,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2.6k Words</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2.9k Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>10 Mins</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>11 Mins</span>
         </span>
     
     
@@ -717,73 +717,6 @@
 <p>实例化多选器时，命名为 <code>dataChooser</code>，表示选出 data 信号</p>
 <p>关于数据线的命名：</p>
 <p><code>X_data</code> 表示的是在 X 区的 <strong>真实</strong> 数据，即已经经过冒险选择器的数据，而<code>a_data</code> 表示是从元件 a 发出的数据</p>
-<h3 id="数据通路"><a href="#数据通路" class="headerlink" title="数据通路"></a>数据通路</h3><p><del>显然可以看出</del>可以将指令集分类如下：</p>
-<ol>
-<li>cal_r：add、sub</li>
-<li>cal_i：ori、lui</li>
-<li>save：sw</li>
-<li>load：lw</li>
-<li>jump：j、jal</li>
-<li>branch:beq</li>
-<li>jump_register：jr、jalr</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th>type</th>
-<th>T_use</th>
-<th>data_requirement</th>
-<th>T_new(D&#x2F;E)</th>
-<th>data_offer</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>cal_r</td>
-<td>1</td>
-<td>GPR[rs]、GPR[rt]</td>
-<td>1</td>
-<td>GPR[rd]</td>
-</tr>
-<tr>
-<td>cal_i</td>
-<td>1</td>
-<td>GPR[rs]</td>
-<td>1</td>
-<td>GPR[rt]</td>
-</tr>
-<tr>
-<td>load</td>
-<td>1</td>
-<td>GPR[rs]</td>
-<td>2</td>
-<td>GPR[rt]</td>
-</tr>
-<tr>
-<td>save</td>
-<td>1、2</td>
-<td>GPR[rs] (1)、GPR[rt] (2)</td>
-<td>0</td>
-<td>-</td>
-</tr>
-<tr>
-<td>jump_register</td>
-<td>0</td>
-<td>GPR[rs]</td>
-<td>1</td>
-<td>GPR[ra] (GPR[rt])</td>
-</tr>
-<tr>
-<td>branch</td>
-<td>0</td>
-<td>GPR[rs]、GPR[rt]</td>
-<td>0</td>
-<td>-</td>
-</tr>
-</tbody></table>
-<p>AT(address and time) 模型解释：</p>
-<p>冒险发生的条件：$A_{use} &#x3D;&#x3D; A_{new}$  （存在 $A_{new}$ 满足，若已经执行完毕排出，不会发生冒险，且 $0 不会影响）</p>
-<p>使用暂停：$T_{use} &lt; T_{new}$</p>
-<p>使用转发：$T_{use} \geqslant T_{new}$</p>
 <h3 id="模块设计"><a href="#模块设计" class="headerlink" title="模块设计"></a>模块设计</h3><p>仅列出有改动的模块</p>
 <p>均采用 clk 上升沿有效，reset 同步复位</p>
 <h4 id="1-pc"><a href="#1-pc" class="headerlink" title="1. pc"></a>1. pc</h4><table>
@@ -803,7 +736,7 @@
 </tr>
 <tr>
 <td>input</td>
-<td>En</td>
+<td>En_low</td>
 </tr>
 <tr>
 <td>input [31:0]</td>
@@ -814,7 +747,7 @@
 <td>pc</td>
 </tr>
 </tbody></table>
-<p><strong>update:</strong> 使能信号En</p>
+<p><strong>update:</strong> 低使能信号En_low</p>
 <h4 id="2-npc"><a href="#2-npc" class="headerlink" title="2. npc"></a>2. npc</h4><table>
 <thead>
 <tr>
@@ -878,7 +811,8 @@
 </tr>
 </tbody></table>
 <p><strong>update:</strong> 不需要进行逻辑运算了</p>
-<h4 id="4-reg"><a href="#4-reg" class="headerlink" title="4. reg"></a>4. reg</h4><p>为了实现代码复用，我只用流水寄存器存储 pc 和指令，以及必要的转发接口，经过分析可以得知，常见的需要存储数据的有 rdata1 ，rdata2，aluOut，logicOut，memOut</p>
+<h4 id="4-grf-mem"><a href="#4-grf-mem" class="headerlink" title="4. grf &amp; mem"></a>4. grf &amp; mem</h4><p><strong>update:</strong> 增加 time_now ，满足输出格式需要</p>
+<h4 id="5-reg"><a href="#5-reg" class="headerlink" title="5. reg"></a>5. reg</h4><p>为了实现代码复用，我只用流水寄存器存储 pc 和指令，以及必要的转发接口，经过分析可以得知，常见的需要存储数据的有 rdata1 ，rdata2，aluOut，logicOut，memOut</p>
 <p>X_Y_reg:</p>
 <p>其中 X_Y_data 表示由该流水寄存器存储的对应数据</p>
 <table>
@@ -924,9 +858,16 @@
 <td>output [31:0]</td>
 <td>X_Y_memOut</td>
 </tr>
+<tr>
+<td>input</td>
+<td>reset</td>
+<td>input</td>
+<td>clk</td>
+<td>input</td>
+<td>En</td>
+</tr>
 </tbody></table>
-<p><del>排版需要</del>，省略了 reset 和 clk</p>
-<h4 id="5-controller"><a href="#5-controller" class="headerlink" title="5. controller"></a>5. controller</h4><p>实例化为 <code>X_ctrl</code></p>
+<h4 id="6-controller"><a href="#6-controller" class="headerlink" title="6. controller"></a>6. controller</h4><p>实例化为 <code>X_ctrl</code></p>
 <p>可以发现直接使用原来的controller就好了，<del>而冒险控制器要考虑的就多了</del>，实际使用时只连需要用的信号即可</p>
 <table>
 <thead>
@@ -980,6 +921,384 @@
 <td>memWrite</td>
 </tr>
 </tbody></table>
+<table>
+<thead>
+<tr>
+<th>choose</th>
+<th>000</th>
+<th>001</th>
+<th>010</th>
+<th>011</th>
+<th>100</th>
+<th>101</th>
+<th>110</th>
+<th>111</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>rd1</td>
+<td>rs</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>rd2</td>
+<td>rt</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>wt</td>
+<td>rd</td>
+<td>rt</td>
+<td>5’d31</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>wdata</td>
+<td>aluOut</td>
+<td>memOut</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>A</td>
+<td>GPR[rd1]</td>
+<td>pc</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>B</td>
+<td>GPR[rd2]</td>
+<td>immZeroExt</td>
+<td>immSignExt</td>
+<td>32’d4</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>memAdr</td>
+<td>aluOut</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>memWdata</td>
+<td>GPR[rd2]</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<h4 id="7-producer-consumer"><a href="#7-producer-consumer" class="headerlink" title="7. producer &amp; consumer"></a>7. producer &amp; consumer</h4><p><del>显然可以看出</del>可以将指令集分类如下：</p>
+<ol>
+<li>cal_r：add、sub</li>
+<li>cal_i：ori、lui</li>
+<li>save：sw</li>
+<li>load：lw</li>
+<li>branch:beq</li>
+<li>jmode：j、jal</li>
+<li>jrmode：jr、jalr</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>type</th>
+<th>T_use</th>
+<th>data_requirement</th>
+<th>T_new(D&#x2F;E)</th>
+<th>data_offer</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>cal_r</td>
+<td>1</td>
+<td>GPR[rs]、GPR[rt]</td>
+<td>1</td>
+<td>GPR[rd]</td>
+</tr>
+<tr>
+<td>cal_i</td>
+<td>1</td>
+<td>GPR[rs]</td>
+<td>1</td>
+<td>GPR[rt]</td>
+</tr>
+<tr>
+<td>load</td>
+<td>1</td>
+<td>GPR[rs]</td>
+<td>2</td>
+<td>GPR[rt]</td>
+</tr>
+<tr>
+<td>save</td>
+<td>1、2</td>
+<td>GPR[rs] (1)、GPR[rt] (2)</td>
+<td>0</td>
+<td>-</td>
+</tr>
+<tr>
+<td>branch</td>
+<td>0</td>
+<td>GPR[rs]、GPR[rt]</td>
+<td>0</td>
+<td>-</td>
+</tr>
+<tr>
+<td>jmode</td>
+<td>0</td>
+<td>-</td>
+<td>1</td>
+<td>$0（j）、$ra(jal)</td>
+</tr>
+<tr>
+<td>jrmode</td>
+<td>0</td>
+<td>GPR[rs]</td>
+<td>1</td>
+<td>GPR[rd]</td>
+</tr>
+</tbody></table>
+<p>说明：将 jr 后面当作 pc + 4 的加法指令，存入 rd ($0)</p>
+<p><strong>AT(address and time) 模型解释：</strong></p>
+<p>冒险发生的条件：$A_{use} &#x3D;&#x3D; A_{new}$  （存在 $A_{new}$ 满足，若已经执行完毕排出，不会发生冒险，且 $0 不会影响）</p>
+<p>使用暂停：$T_{use} &lt; T_{new}$</p>
+<p>使用转发：$T_{use} \geqslant T_{new}$<br>producer:</p>
+<table>
+<thead>
+<tr>
+<th>def</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>input [31:0]</td>
+<td>instr</td>
+</tr>
+<tr>
+<td>input [2:0]</td>
+<td>Tnow</td>
+</tr>
+<tr>
+<td>output  [2:0]</td>
+<td>Tnew</td>
+</tr>
+<tr>
+<td>output  [4:0]</td>
+<td>A</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>zone</th>
+<th>E</th>
+<th>M</th>
+<th>W</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tnow</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+</tr>
+</tbody></table>
+<p>consumer:</p>
+<table>
+<thead>
+<tr>
+<th>def</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>input [31:0]</td>
+<td>instr</td>
+</tr>
+<tr>
+<td>output  [4:0]</td>
+<td>A_1</td>
+</tr>
+<tr>
+<td>output  [2:0]</td>
+<td>Tuse_1</td>
+</tr>
+<tr>
+<td>output  [4:0]</td>
+<td>A_2</td>
+</tr>
+<tr>
+<td>output  [2:0]</td>
+<td>Tuse_2</td>
+</tr>
+</tbody></table>
+<h4 id="8-hazard-ctrl"><a href="#8-hazard-ctrl" class="headerlink" title="8.hazard_ctrl"></a>8.hazard_ctrl</h4><p>应该算是本次实验最核心的部分，为了扩展性和封装性，我选择接收所有区域的指令到hazard_ctrl 内部计算 $T_{use}$ 和 $T_{new}$ 。</p>
+<table>
+<thead>
+<tr>
+<th>def</th>
+<th>name</th>
+<th>def</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>input[31:0]</td>
+<td>F_D_instr</td>
+<td>output[2:0]</td>
+<td>D_rdata1Choose</td>
+</tr>
+<tr>
+<td>input[31:0]</td>
+<td>D_E_instr</td>
+<td>output[2:0]</td>
+<td>D_rdata2Choose</td>
+</tr>
+<tr>
+<td>input[31:0]</td>
+<td>E_M_instr</td>
+<td>output[2:0]</td>
+<td>E_rdata1Choose</td>
+</tr>
+<tr>
+<td>input[31:0]</td>
+<td>M_W_instr</td>
+<td>output[2:0]</td>
+<td>E_rdata2Choose</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>output[2:0]</td>
+<td>M_rdata2Choose</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>output</td>
+<td>stall</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>output</td>
+<td>clear</td>
+</tr>
+</tbody></table>
+<p>选择信号（留的接口多就可以对齐）:</p>
+<table>
+<thead>
+<tr>
+<th>choose</th>
+<th>000</th>
+<th>001</th>
+<th>010</th>
+<th>011</th>
+<th>100</th>
+<th>101</th>
+<th>110</th>
+<th>111</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>D_rdata1Choose</td>
+<td>grf_rdata1</td>
+<td>M_aluOut</td>
+<td>W_memOut</td>
+<td>W_aluOut</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>D_rdata2Choose</td>
+<td>grf_rdata2</td>
+<td>M_aluOut</td>
+<td>W_memOut</td>
+<td>W_aluOut</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>E_rdata1Choose</td>
+<td>D_E_rdata1</td>
+<td>M_aluOut</td>
+<td>W_memOut</td>
+<td>W_aluOut</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>E_rdata2Choose</td>
+<td>D_E_rdata2</td>
+<td>M_aluOut</td>
+<td>W_memOut</td>
+<td>W_aluOut</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>M_rdata2Choose</td>
+<td>E_M_rdata2</td>
+<td>-</td>
+<td>W_memOut</td>
+<td>W_aluOut</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<p>选择逻辑：</p>
+<ol>
+<li>计算 F_D_instr 的 A（若不需要数据，则 A 值默认为 0） 和 $T_{use}$</li>
+<li>计算后面三个寄存器中的 $T_{new}$</li>
+<li>若产生冲突，根据最近的判断，如果 $T_{use} &lt; T_{new}$，触发暂停，冻结PC、F_D_reg，排空 D_E_reg</li>
+<li>若 $T_{new} &#x3D; 0$ ，向前转发 A 值相同的</li>
+</ol>
 <h2 id="测试方案"><a href="#测试方案" class="headerlink" title="测试方案"></a>测试方案</h2><h2 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h2><blockquote>
 <p>1、我们使用提前分支判断的方法尽早产生结果来减少因不确定而带来的开销，但实际上这种方法并非总能提高效率，请从流水线冒险的角度思考其原因并给出一个指令序列的例子。</p>
 </blockquote>
@@ -1051,8 +1370,8 @@
 <td>jump_register</td>
 <td>0</td>
 <td>GPR[rs]</td>
-<td>0</td>
-<td>-</td>
+<td>1</td>
+<td>GPR[ra] (GPR[rt])</td>
 </tr>
 <tr>
 <td>branch</td>
@@ -1146,7 +1465,7 @@
         
             <li>
                 <strong>Updated at
-                    :</strong> 2025-11-13 17:36:25
+                    :</strong> 2025-11-14 23:55:23
             </li>
         
         <li>
@@ -1254,7 +1573,7 @@
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
 		<div class="page-title">COP5</div>
-		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%90%86%E8%AE%BA"><span class="nav-text">理论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%91%A8%E6%9C%9FCPU"><span class="nav-text">多周期CPU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-text">流水线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%92%E9%99%A9hazard"><span class="nav-text">冒险hazard</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E8%8D%89%E7%A8%BF"><span class="nav-text">设计草稿</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83"><span class="nav-text">命名规范</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%80%9A%E8%B7%AF"><span class="nav-text">数据通路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1"><span class="nav-text">模块设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88"><span class="nav-text">测试方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98"><span class="nav-text">思考题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="nav-text">指令集</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%90%86%E8%AE%BA"><span class="nav-text">理论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%91%A8%E6%9C%9FCPU"><span class="nav-text">多周期CPU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-text">流水线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%92%E9%99%A9hazard"><span class="nav-text">冒险hazard</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E8%8D%89%E7%A8%BF"><span class="nav-text">设计草稿</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83"><span class="nav-text">命名规范</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1"><span class="nav-text">模块设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88"><span class="nav-text">测试方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98"><span class="nav-text">思考题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="nav-text">指令集</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -1285,7 +1604,7 @@
                     </span>
                     
                         <span>
-                            13.4k words in total
+                            13.7k words in total
                         </span>
                     
                 </p>
