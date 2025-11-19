@@ -216,7 +216,119 @@
     
     
     
-<meta name="generator" content="Hexo 7.3.0"></head>
+<meta name="generator" content="Hexo 7.3.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
 
 
 
@@ -592,7 +704,7 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>457 Words</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>446 Words</span>
         </span>
     
     
@@ -621,7 +733,7 @@
 
 <p>使用参数的宏可以复用相似代码，让代码更简洁</p>
 <p><strong>2.条件分支与循环控制</strong>：</p>
-<p>主要利用条件指令跳转，一定要注意转移方程（如i +&#x3D; 1），注意结束条件</p>
+<p>主要利用条件指令跳转，一定要注意转移方程（如i += 1），注意结束条件</p>
 <p><code>e = nextEdge[e]</code></p>
 <p><strong>3.函数调用方法</strong>：</p>
 <p>使用 $sp 进行栈存储，需要注意后入先出，存储返回地址和可能会覆盖到的寄存器数据，保证返回时能够恢复到原来的样子</p>
@@ -633,7 +745,7 @@
 <p><strong>5.格式化输入输出</strong>：</p>
 <p>F1 help 可以看 syscall 用法</p>
 <h2 id="P2-题解"><a href="#P2-题解" class="headerlink" title="P2 题解"></a>P2 题解</h2><h3 id="01-迷宫"><a href="#01-迷宫" class="headerlink" title="01 迷宫"></a>01 迷宫</h3><p>核心思路：(这里我从 0 开始编号，和输入的起点终点编号有区别，注意区分)</p>
-<div class="code-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">int</span> fx[<span class="number">4</span>] = &#123;<span class="number">-1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>&#125; , fy[<span class="number">4</span>] = &#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">-1</span>,<span class="number">1</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">dfs</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span> </span><br><span class="line">&#123;</span><br><span class="line">    mark[x][y] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> (x == goal_x &amp;&amp; y == goal_y) &#123;</span><br><span class="line">        sum++;</span><br><span class="line">        mark[x][y] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i &lt; <span class="number">4</span> ; ++i) &#123;</span><br><span class="line">        <span class="type">int</span> next_x = x + fx[i];</span><br><span class="line">        <span class="type">int</span> next_y = y + fy[i];</span><br><span class="line">        <span class="keyword">if</span>(next_x &lt; <span class="number">0</span> || next_y &lt; <span class="number">0</span> || next_x &gt;= n || next_y &gt;= m) <span class="keyword">continue</span>;</span><br><span class="line">        <span class="keyword">if</span>(mark[next_x][next_y] == <span class="number">1</span> || <span class="built_in">map</span>[next_x][next_y] == <span class="number">1</span>) <span class="keyword">continue</span>; <span class="comment">//mark是已经走过，map是输入时的map</span></span><br><span class="line">        dfs(nx,ny);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    mark[x][y] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+<div class="code-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="type">int</span> fx[<span class="number">4</span>] = {<span class="number">-1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>} , fy[<span class="number">4</span>] = {<span class="number">0</span>,<span class="number">0</span>,<span class="number">-1</span>,<span class="number">1</span>};</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">dfs</span><span class="params">(<span class="type">int</span> x,<span class="type">int</span> y)</span> </span><br><span class="line">{</span><br><span class="line">    mark[x][y] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> (x == goal_x &amp;&amp; y == goal_y) {</span><br><span class="line">        sum++;</span><br><span class="line">        mark[x][y] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span> ; i &lt; <span class="number">4</span> ; ++i) {</span><br><span class="line">        <span class="type">int</span> next_x = x + fx[i];</span><br><span class="line">        <span class="type">int</span> next_y = y + fy[i];</span><br><span class="line">        <span class="keyword">if</span>(next_x &lt; <span class="number">0</span> || next_y &lt; <span class="number">0</span> || next_x &gt;= n || next_y &gt;= m) <span class="keyword">continue</span>;</span><br><span class="line">        <span class="keyword">if</span>(mark[next_x][next_y] == <span class="number">1</span> || <span class="built_in">map</span>[next_x][next_y] == <span class="number">1</span>) <span class="keyword">continue</span>; <span class="comment">//mark是已经走过，map是输入时的map</span></span><br><span class="line">        dfs(nx,ny);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    mark[x][y] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
 
 <p>debug注意：</p>
 <ol>
@@ -807,7 +919,7 @@
                     </span>
                     
                         <span>
-                            14.3k words in total
+                            13.9k words in total
                         </span>
                     
                 </p>
