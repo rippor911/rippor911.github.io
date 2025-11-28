@@ -133,14 +133,14 @@
         
         <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="COP6">
+<meta property="og:title" content="计组P6——流水线CPU（复杂指令集）">
 <meta property="og:url" content="http://example.com/2025/11/20/COP6/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/images/redefine-og.webp">
 <meta property="article:published_time" content="2025-11-20T01:22:09.000Z">
-<meta property="article:modified_time" content="2025-11-20T01:22:43.767Z">
+<meta property="article:modified_time" content="2025-11-28T09:32:47.806Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Verilog">
 <meta property="article:tag" content="五层流水线CPU">
@@ -157,7 +157,7 @@
     
     <title>
         
-            COP6 | Adventure
+            计组P6——流水线CPU（复杂指令集） | Adventure
         
     </title>
 
@@ -633,7 +633,7 @@ mjx-container[display="true"] + br {
 		<div class="article-title relative w-full">
 			
 			<div class="w-full flex items-center pt-6 justify-start">
-				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">COP6</h1>
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">计组P6——流水线CPU（复杂指令集）</h1>
 			</div>
 			
 		</div>
@@ -661,8 +661,8 @@ mjx-container[display="true"] + br {
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-20 09:22:43</span>
-            <span class="mobile">2025-11-20 09:22:43</span>
+            <span class="desktop">2025-11-28 17:32:47</span>
+            <span class="mobile">2025-11-28 17:32:47</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -703,9 +703,13 @@ mjx-container[display="true"] + br {
 
     
     
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.7k Words</span>
+        </span>
+    
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>1 Mins</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>6 Mins</span>
         </span>
     
     
@@ -724,21 +728,120 @@ mjx-container[display="true"] + br {
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			
+			<h2 id="设计草稿"><a href="#设计草稿" class="headerlink" title="设计草稿"></a>设计草稿</h2><p>处理器应为五级流水线设计，支持如下指令集：</p>
+<div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">add, sub, and, or, slt, sltu, lui</span><br><span class="line">addi, andi, ori</span><br><span class="line">lb, lh, lw, sb, sh, sw</span><br><span class="line">mult, multu, div, divu, mfhi, mflo, mthi, mtlo</span><br><span class="line">beq, bne, jal, jr</span><br></pre></td></tr></table></figure></div>
+
+<p>要求存储器外置，即将 IM 和 DM 放置在 CPU 之外</p>
+<p>需有单独的乘除法模块和数据扩展模块</p>
+<p>除了乘除相关，其余指令均可直接添加</p>
+<h3 id="乘除单元"><a href="#乘除单元" class="headerlink" title="乘除单元"></a>乘除单元</h3><p>计算指令：<code>mult, multu, div, divu</code></p>
+<p>存取指令：<code>mfhi, mflo, mthi, mtlo</code></p>
+<p>计算指令和 mt 指令按 R 型指令理解都是 rd 为 0，因此只需要增加乘除计算即可，而针对 mf 指令我采取的思路是当作 ALUOut 处理</p>
+<p>由于是模拟延迟，所以照着要求写即可：</p>
+<ul>
+<li>执行乘法的时间为 5 个时钟周期，执行除法的时间为 10 个时钟周期（包含写入内部的 HI 和 LO 寄存器）</li>
+<li>自 Start 信号有效后的第 1 个 clock 上升沿开始，乘除法部件开始执行运算，同时将 Busy 置位为 1。</li>
+<li>在运算结果保存到 HI 寄存器和 LO 寄存器后，Busy 位清除为 0。</li>
+<li>当 Busy 信号或 Start 信号为 1 时，mult, multu, div, divu, mfhi, mflo, mthi, mtlo 等乘除法相关的指令均被阻塞在 D 流水级。</li>
+<li>数据写入 HI 寄存器或 LO 寄存器，均只需 1 个时钟周期。</li>
+</ul>
+<p>相当于一个状态机 + 2 个寄存器的组合，事实上可以组合逻辑算出来直接存入寄存器，然后暂停剩下的周期</p>
+<table>
+<thead>
+<tr>
+<th>def</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>input</td>
+<td>clk</td>
+</tr>
+<tr>
+<td>input</td>
+<td>reset</td>
+</tr>
+<tr>
+<td>input [31:0]</td>
+<td>A</td>
+</tr>
+<tr>
+<td>input [31:0]</td>
+<td>B</td>
+</tr>
+<tr>
+<td>input [3:0]</td>
+<td>op</td>
+</tr>
+<tr>
+<td>output</td>
+<td>busy</td>
+</tr>
+<tr>
+<td>output [31:0]</td>
+<td>out</td>
+</tr>
+</tbody></table>
+<p>分析指令集，可知这八条指令的func满足01x0xx的格式，可以利用这个简化逻辑</p>
+<p>其中计算为0110xx，存取为0100xx</p>
+<h2 id="测试方案"><a href="#测试方案" class="headerlink" title="测试方案"></a>测试方案</h2><h2 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h2><h3 id="1-思考题1"><a href="#1-思考题1" class="headerlink" title="1. 思考题1"></a>1. 思考题1</h3><blockquote>
+<p>为什么需要有单独的乘除法部件而不是整合进 ALU？为何需要有独立的 HI、LO 寄存器？</p>
+</blockquote>
+<p>因为乘除法部件的执行乘法的时间为 5 个时钟周期，执行除法的时间为 10 个时钟周期，如果整合到 ALU 就会占用 ALU 很长时间，如果后续指令暂时不涉及乘除相关，也与结果无关，但这时也无法运行，导致效率低下</p>
+<p>独立的 HI、LO 寄存器我认为有两点好处，一是解决了目标寄存器如何确定，比如说乘法会产生高位和低位需要两个寄存器来存储，而非乘除的计算指令是计算完直接存到一个寄存器中；另一个是避免了冲突写入的问题，如果乘除完成时恰好也有一条别的计算指令在 ALU 完成，尝试写入同一寄存器时就会产生问题。总而言之，就是由于乘除的完成周期与其他指令有较大差异，为了方便处理最好需要有独立寄存器存储结果</p>
+<h3 id="2-思考题2"><a href="#2-思考题2" class="headerlink" title="2. 思考题2"></a>2. 思考题2</h3><blockquote>
+<p>真实的流水线 CPU 是如何使用实现乘除法的？请查阅相关资料进行简单说明。</p>
+</blockquote>
+<p><strong>乘法：</strong></p>
+<ol>
+<li>类比竖式计算， N 位乘法会产生 N 行部分积，然后相加，但现代 CPU 使用一种叫 Wallace Tree（华莱士树） 或 Compressor Tree（压缩器树） 的电路结构，这种由全加器组成的“树”可以并行地将几十个部分积迅速压缩成两个数（Sum 和 Carry）</li>
+<li>通过合理的方式将树合并的过程分割成几个流水段</li>
+</ol>
+<p><strong>除法：</strong></p>
+<p>现代高性能 CPU 大多使用 SRT 算法，它不强求算出精确的余数比较大小，而是只需要看余数的前几位，估算出一个商，如果估大了，下一位商可以是负数（-1），把多减的补回来</p>
+<h3 id="3-思考题3"><a href="#3-思考题3" class="headerlink" title="3. 思考题3"></a>3. 思考题3</h3><blockquote>
+<p>请结合自己的实现分析，你是如何处理 Busy 信号带来的周期阻塞的？</p>
+</blockquote>
+<p><code>mult、multu、div、divu</code> 进入 D\E 流水寄存器时，D\E 会产生 start 信号（start = 1），然后乘除单元内部在下一个上升沿更新计数 count ，count 不为 0 时输出 busy 为 1，冒险控制单元检查只要 start | busy 为真，就将后续所有乘除相关指令阻塞在 D 级</p>
+<h3 id="4-思考题4"><a href="#4-思考题4" class="headerlink" title="4. 思考题4"></a>4. 思考题4</h3><blockquote>
+<p>请问采用字节使能信号的方式处理写指令有什么好处？（提示：从清晰性、统一性等角度考虑）</p>
+</blockquote>
+<p>从清晰性来说，可以直观表示在一个字地址的哪些位置写入；从统一性来说，无论是字、半字还是字节，都能用相似的模式表示，对存储单元的描述更方便</p>
+<h3 id="5-思考题5"><a href="#5-思考题5" class="headerlink" title="5. 思考题5"></a>5. 思考题5</h3><blockquote>
+<p>请思考，我们在按字节读和按字节写时，实际从 DM 获得的数据和向 DM 写入的数据是否是一字节？在什么情况下我们按字节读和按字节写的效率会高于按字读和按字写呢？</p>
+</blockquote>
+<p>实际数据都是一个字，从DM获得的数据会进行扩展，写入的数据会将低位重复填充一个字，方便按字节使能写入</p>
+<p>如果数据未对齐，按字读写可能导致两次内存访问</p>
+<h3 id="6-思考题6"><a href="#6-思考题6" class="headerlink" title="6. 思考题6"></a>6. 思考题6</h3><blockquote>
+<p>为了对抗复杂性你采取了哪些抽象和规范手段？这些手段在译码和处理数据冲突的时候有什么样的特点与帮助？</p>
+</blockquote>
+<p>为指令分类，具有相似特性的指令归为一类，产生相似的控制信号</p>
+<p>能够快速地确定每条指令的控制信号如何产生</p>
+<h3 id="7-思考题7"><a href="#7-思考题7" class="headerlink" title="7. 思考题7"></a>7. 思考题7</h3><blockquote>
+<p>在本实验中你遇到了哪些不同指令类型组合产生的冲突？你又是如何解决的？相应的测试样例是什么样的？</p>
+</blockquote>
+<p><code>mfhi</code>、<code>mflo</code> 与其他需要读取寄存器的指令的冲突，将 <code>mfhi</code>、<code>mflo</code> 当作 R 型指令，设置相应的 Tnew</p>
+<div class="code-container" data-rel="Mips"><figure class="iseeu highlight mips"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ori </span>$<span class="built_in">t1</span>,$<span class="number">0</span>,<span class="number">2</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="built_in">t2</span>,$<span class="number">0</span>,<span class="number">3</span></span><br><span class="line"><span class="keyword">mult</span></span><br><span class="line"><span class="keyword"></span><span class="keyword">mfhi </span>$<span class="built_in">t3</span></span><br><span class="line"><span class="keyword">add </span>$<span class="built_in">t4</span>,$<span class="built_in">t3</span>,$<span class="built_in">t3</span></span><br><span class="line"><span class="keyword">mflo </span>$<span class="built_in">t5</span></span><br><span class="line"><span class="keyword">sub </span>$<span class="built_in">t6</span>,$<span class="built_in">t5</span>,$<span class="built_in">t5</span></span><br></pre></td></tr></table></figure></div>
+
+<h3 id="8-思考题8"><a href="#8-思考题8" class="headerlink" title="8. 思考题8"></a>8. 思考题8</h3><blockquote>
+<p>如果你是手动构造的样例，请说明构造策略，说明你的测试程序如何保证覆盖了所有需要测试的情况；如果你是完全随机生成的测试样例，请思考完全随机的测试程序有何不足之处；如果你在生成测试样例时采用了特殊的策略，比如构造连续数据冒险序列，请你描述一下你使用的策略如何结合了随机性达到强测的效果。</p>
+</blockquote>
+<p>手动构造策略为对指令种类两两组合，并间隔0~3条指令以覆盖所有情况</p>
+
 		</div>
 
 		
 		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
 			<div class="article-copyright-info-container">
     <ul>
-        <li><strong>Title:</strong> COP6</li>
+        <li><strong>Title:</strong> 计组P6——流水线CPU（复杂指令集）</li>
         <li><strong>Author:</strong> rippor</li>
         <li><strong>Created at
                 :</strong> 2025-11-20 09:22:09</li>
         
             <li>
                 <strong>Updated at
-                    :</strong> 2025-11-20 09:22:43
+                    :</strong> 2025-11-28 17:32:47
             </li>
         
         <li>
@@ -783,7 +886,7 @@ mjx-container[display="true"] + br {
 			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
 				<a class="next" rel="next" href="/2025/11/10/COP5/">
 					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">COP5</span>
+						<span class="post-nav-title-item truncate max-w-48">计组P5——流水线CPU（简化指令集）</span>
 						<span class="post-nav-item">Next posts</span>
 					</span>
 					<span class="right arrow-icon flex justify-center items-center">
@@ -845,8 +948,8 @@ mjx-container[display="true"] + br {
 		<div class="post-toc-wrap">
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
-		<div class="page-title">COP6</div>
-		
+		<div class="page-title">计组P6——流水线CPU（复杂指令集）</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E8%8D%89%E7%A8%BF"><span class="nav-text">设计草稿</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B9%98%E9%99%A4%E5%8D%95%E5%85%83"><span class="nav-text">乘除单元</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88"><span class="nav-text">测试方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98"><span class="nav-text">思考题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%80%9D%E8%80%83%E9%A2%981"><span class="nav-text">1. 思考题1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%80%9D%E8%80%83%E9%A2%982"><span class="nav-text">2. 思考题2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%80%9D%E8%80%83%E9%A2%983"><span class="nav-text">3. 思考题3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%80%9D%E8%80%83%E9%A2%984"><span class="nav-text">4. 思考题4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E6%80%9D%E8%80%83%E9%A2%985"><span class="nav-text">5. 思考题5</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E6%80%9D%E8%80%83%E9%A2%986"><span class="nav-text">6. 思考题6</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E6%80%9D%E8%80%83%E9%A2%987"><span class="nav-text">7. 思考题7</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-%E6%80%9D%E8%80%83%E9%A2%988"><span class="nav-text">8. 思考题8</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -877,7 +980,7 @@ mjx-container[display="true"] + br {
                     </span>
                     
                         <span>
-                            14.3k words in total
+                            16k words in total
                         </span>
                     
                 </p>
