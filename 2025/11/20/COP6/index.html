@@ -140,7 +140,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/images/redefine-og.webp">
 <meta property="article:published_time" content="2025-11-20T01:22:09.000Z">
-<meta property="article:modified_time" content="2025-11-28T09:32:47.806Z">
+<meta property="article:modified_time" content="2025-12-01T13:31:47.495Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Verilog">
 <meta property="article:tag" content="五层流水线CPU">
@@ -602,15 +602,15 @@ mjx-container[display="true"] + br {
 
         <div class="statistics flex justify-around my-2.5">
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">8</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">9</div>
         <div class="label text-third-text-color text-sm">Tags</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">2</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">3</div>
         <div class="label text-third-text-color text-sm">Categories</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">10</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">11</div>
         <div class="label text-third-text-color text-sm">Posts</div>
     </a>
 </div>
@@ -661,8 +661,8 @@ mjx-container[display="true"] + br {
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-28 17:32:47</span>
-            <span class="mobile">2025-11-28 17:32:47</span>
+            <span class="desktop">2025-12-01 21:31:47</span>
+            <span class="mobile">2025-12-01 21:31:47</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -704,12 +704,12 @@ mjx-container[display="true"] + br {
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.7k Words</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2.1k Words</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>6 Mins</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>7 Mins</span>
         </span>
     
     
@@ -728,7 +728,20 @@ mjx-container[display="true"] + br {
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			<h2 id="设计草稿"><a href="#设计草稿" class="headerlink" title="设计草稿"></a>设计草稿</h2><p>处理器应为五级流水线设计，支持如下指令集：</p>
+			<h2 id="课上回忆"><a href="#课上回忆" class="headerlink" title="课上回忆"></a>课上回忆</h2><h3 id="mujica"><a href="#mujica" class="headerlink" title="mujica"></a>mujica</h3><p>非典型 I 型计算指令，主要修改点在于需要GPR【rt】参与计算</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">immExt &lt;- sign_ext(immediate16)</span><br><span class="line">temp &lt;- countOnes(immExt)</span><br><span class="line">if temp % 2 == 0 :</span><br><span class="line">    GPR[rt] &lt;- (GPR[rs] &amp; immExt) + GPR[rt]</span><br><span class="line">else :</span><br><span class="line">    GPR[rt] &lt;- (GPR[rs] | immExt) ^ GPR[rt]</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="botto"><a href="#botto" class="headerlink" title="botto"></a>botto</h3><p>感觉最有新意的题，主要修改点在于需要根据判断条件决定写入哪个寄存器</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">hd &lt;- countOnes(GPR[rs] ^ GPR[rt])</span><br><span class="line">if  hd &lt; 8:</span><br><span class="line">    PC &lt;- PC + 4 + sign_ext(offset||2'b00)</span><br><span class="line">    GPR[rt] &lt;- hd</span><br><span class="line">else if hd &lt;= 24:</span><br><span class="line">    PC &lt;- PC + 4</span><br><span class="line">    GPR[rs] &lt;- GPR[rt] &gt;&gt; hd    # 算术右移</span><br><span class="line">else:</span><br><span class="line">    PC &lt;- PC + 4</span><br><span class="line">    GPR[rs] &lt;- GPR[rs] ^ GPR[rt]   </span><br></pre></td></tr></table></figure></div>
+
+<p>笔者的做法是流水一个reverse信号，注意只有在最后 WB 阶段才真正使用（在冒险控制器中只对计算供应者 A 值有效）</p>
+<p>更直白地说，在之后的操作里我将其包装成计算时无效，但是决定写入寄存器有效的 reverse 信号（把 rs 当 rt，rt 当 rs）</p>
+<p>还有一个坑点就是算术右移是 &gt;&gt;&gt; ，而且注意需要用 $signed()</p>
+<h3 id="lwcm"><a href="#lwcm" class="headerlink" title="lwcm"></a>lwcm</h3><p>稍有变化但是并不复杂的一道题，需要在 M 阶段增加一个 WD 寄存器，这个寄存器只会被 lwcm 改变（初始为 0），并且影响着 lwcm 写入寄存器的地址</p>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">读 memword 的操作不变</span><br><span class="line"></span><br><span class="line">if memword == WD :</span><br><span class="line">    GPR[rt] &lt;- memword</span><br><span class="line">else :</span><br><span class="line">    GPR[26] &lt;- memword</span><br><span class="line">WD &lt;- memword   #先判断后赋值</span><br></pre></td></tr></table></figure></div>
+
+<p>同 P5 ，如果是 rt 或 26 就考虑是否要阻塞；然后注意判断的时机是要把memword 写入 M/W 流水寄存器之前，笔者使用流水一个 flag 的方式供下一级使用</p>
+<h2 id="设计草稿"><a href="#设计草稿" class="headerlink" title="设计草稿"></a>设计草稿</h2><p>处理器应为五级流水线设计，支持如下指令集：</p>
 <div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">add, sub, and, or, slt, sltu, lui</span><br><span class="line">addi, andi, ori</span><br><span class="line">lb, lh, lw, sb, sh, sw</span><br><span class="line">mult, multu, div, divu, mfhi, mflo, mthi, mtlo</span><br><span class="line">beq, bne, jal, jr</span><br></pre></td></tr></table></figure></div>
 
 <p>要求存储器外置，即将 IM 和 DM 放置在 CPU 之外</p>
@@ -841,7 +854,7 @@ mjx-container[display="true"] + br {
         
             <li>
                 <strong>Updated at
-                    :</strong> 2025-11-28 17:32:47
+                    :</strong> 2025-12-01 21:31:47
             </li>
         
         <li>
@@ -881,6 +894,18 @@ mjx-container[display="true"] + br {
 
 		
 		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="prev" rel="prev" href="/2025/11/29/machine-learning/">
+					<span class="left arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-left"></i>
+					</span>
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">机器学习</span>
+						<span class="post-nav-item">Prev posts</span>
+					</span>
+				</a>
+			</div>
 			
 			
 			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
@@ -949,7 +974,7 @@ mjx-container[display="true"] + br {
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
 		<div class="page-title">计组P6——流水线CPU（复杂指令集）</div>
-		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E8%8D%89%E7%A8%BF"><span class="nav-text">设计草稿</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B9%98%E9%99%A4%E5%8D%95%E5%85%83"><span class="nav-text">乘除单元</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88"><span class="nav-text">测试方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98"><span class="nav-text">思考题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%80%9D%E8%80%83%E9%A2%981"><span class="nav-text">1. 思考题1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%80%9D%E8%80%83%E9%A2%982"><span class="nav-text">2. 思考题2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%80%9D%E8%80%83%E9%A2%983"><span class="nav-text">3. 思考题3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%80%9D%E8%80%83%E9%A2%984"><span class="nav-text">4. 思考题4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E6%80%9D%E8%80%83%E9%A2%985"><span class="nav-text">5. 思考题5</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E6%80%9D%E8%80%83%E9%A2%986"><span class="nav-text">6. 思考题6</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E6%80%9D%E8%80%83%E9%A2%987"><span class="nav-text">7. 思考题7</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-%E6%80%9D%E8%80%83%E9%A2%988"><span class="nav-text">8. 思考题8</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BE%E4%B8%8A%E5%9B%9E%E5%BF%86"><span class="nav-text">课上回忆</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mujica"><span class="nav-text">mujica</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#botto"><span class="nav-text">botto</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lwcm"><span class="nav-text">lwcm</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E8%8D%89%E7%A8%BF"><span class="nav-text">设计草稿</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B9%98%E9%99%A4%E5%8D%95%E5%85%83"><span class="nav-text">乘除单元</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88"><span class="nav-text">测试方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98"><span class="nav-text">思考题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%80%9D%E8%80%83%E9%A2%981"><span class="nav-text">1. 思考题1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%80%9D%E8%80%83%E9%A2%982"><span class="nav-text">2. 思考题2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%80%9D%E8%80%83%E9%A2%983"><span class="nav-text">3. 思考题3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%80%9D%E8%80%83%E9%A2%984"><span class="nav-text">4. 思考题4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E6%80%9D%E8%80%83%E9%A2%985"><span class="nav-text">5. 思考题5</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E6%80%9D%E8%80%83%E9%A2%986"><span class="nav-text">6. 思考题6</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E6%80%9D%E8%80%83%E9%A2%987"><span class="nav-text">7. 思考题7</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-%E6%80%9D%E8%80%83%E9%A2%988"><span class="nav-text">8. 思考题8</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -976,11 +1001,11 @@ mjx-container[display="true"] + br {
                 
                 <p class="post-count space-x-0.5">
                     <span>
-                        10 posts in total
+                        11 posts in total
                     </span>
                     
                         <span>
-                            16k words in total
+                            17.9k words in total
                         </span>
                     
                 </p>
