@@ -140,7 +140,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/images/redefine-og.webp">
 <meta property="article:published_time" content="2025-12-02T02:12:46.000Z">
-<meta property="article:modified_time" content="2025-12-02T02:13:52.515Z">
+<meta property="article:modified_time" content="2025-12-06T15:19:39.258Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Verilog">
 <meta property="article:tag" content="五层流水线CPU">
@@ -661,8 +661,8 @@ mjx-container[display="true"] + br {
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-12-02 10:13:52</span>
-            <span class="mobile">2025-12-02 10:13:52</span>
+            <span class="desktop">2025-12-06 23:19:39</span>
+            <span class="mobile">2025-12-06 23:19:39</span>
             <span class="hover-info">Updated</span>
         </span>
     
@@ -703,9 +703,13 @@ mjx-container[display="true"] + br {
 
     
     
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2k Words</span>
+        </span>
+    
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>1 Mins</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>7 Mins</span>
         </span>
     
     
@@ -724,7 +728,460 @@ mjx-container[display="true"] + br {
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			
+			<h2 id="设计草稿"><a href="#设计草稿" class="headerlink" title="设计草稿"></a>设计草稿</h2><table>
+<thead>
+<tr>
+<th>任务</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>计时器</td>
+<td>课程组提供实现代码，只需要结合代码和文档理解应用即可</td>
+</tr>
+<tr>
+<td>系统桥</td>
+<td>为 CPU 提供统一的访问外设的接口，需要按规格自行实现</td>
+</tr>
+<tr>
+<td>协处理器 CP0</td>
+<td>设置 CPU 的异常处理功能，反馈 CPU 的异常信息，需要按规格自行实现</td>
+</tr>
+<tr>
+<td>内部异常检测与流水</td>
+<td>CPU 需要具有可以检测内部指令执行错误的能力</td>
+</tr>
+<tr>
+<td>外部中断响应</td>
+<td>CPU 需要具有初步响应外部中断信号的能力</td>
+</tr>
+<tr>
+<td>异常处理指令</td>
+<td>在异常处理程序中，会有一些特殊的指令需要实现</td>
+</tr>
+<tr>
+<td>单周期 CPU 的封装</td>
+<td>让 CPU 从外部看上去是一个单周期 CPU</td>
+</tr>
+<tr>
+<td>异常处理程序</td>
+<td>利用 MARS 编写简单的异常处理程序用于测试</td>
+</tr>
+</tbody></table>
+<p><img lazyload="" src="/images/loading.svg" data-src="/../img/MIPS%E5%BE%AE%E7%B3%BB%E7%BB%9F.png" alt="MIPS微系统"></p>
+<p>建议：先整体把握所有要做的东西，然后按照外设-&gt;CP0-&gt;异常处理逻辑的顺序较好，主要是为了在写异常之前确认有哪些方向会出异常</p>
+<h3 id="计时器tc"><a href="#计时器tc" class="headerlink" title="计时器tc"></a>计时器tc</h3><p>不需要实现，但是需要了解功能与用法</p>
+<p>其端口设计相当于多加一个输出中断信号 IRQ 的 DM</p>
+<p>内部有 state 和三个寄存器 ctrl、preset、count</p>
+<table>
+<thead>
+<tr>
+<th>reg</th>
+<th>I/O</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ctrl</td>
+<td>I/O</td>
+<td>[3]:中断使能，[2:1]:模式（mode0：倒数至 0 后持续中断，mode1：循环计数，mode2、3未定义），[0]：计数使能</td>
+</tr>
+<tr>
+<td>present</td>
+<td>I/O</td>
+<td>初值</td>
+</tr>
+<tr>
+<td>count</td>
+<td>O</td>
+<td>计数</td>
+</tr>
+</tbody></table>
+<p><img lazyload="" src="/images/loading.svg" data-src="/../img/tc.jpg" alt="tc"></p>
+<table>
+<thead>
+<tr>
+<th>state</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IDLE</td>
+<td>初始状态，不计数</td>
+</tr>
+<tr>
+<td>LOAD</td>
+<td>每次开始计数前的准备，将present的数装入count</td>
+</tr>
+<tr>
+<td>CNT</td>
+<td>计数状态，ctrl[0] = 1 时有效</td>
+</tr>
+<tr>
+<td>INT</td>
+<td>结束状态，若ctrl[2:1] == 0，则产生持续中断信号（mode0），否则开始新一轮计数（mode1）</td>
+</tr>
+</tbody></table>
+<h3 id="系统桥bridge"><a href="#系统桥bridge" class="headerlink" title="系统桥bridge"></a>系统桥bridge</h3><p>该模块需要完成两个功能：</p>
+<ol>
+<li>联系 CPU 和两个 tc 、以及其他外设</li>
+<li>根据访存地址分配相应的存储空间（简单来说就是分辨要读写外设的内存、中断寄存器还是 tc）</li>
+</ol>
+<p>由于理论上来说 grf 是属于 CPU 的，只是为了评测好像需要与外界相连，因此我们将grf相关信号直接从 CPU 连到 mips 端口，其他则需要按照设计走系统桥</p>
+<table>
+<thead>
+<tr>
+<th>def</th>
+<th>name</th>
+<th>function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>input</td>
+<td>interrupt</td>
+<td>外部中断信号</td>
+</tr>
+<tr>
+<td>input</td>
+<td>IRQ0</td>
+<td>tc0中断信号</td>
+</tr>
+<tr>
+<td>input</td>
+<td>IRQ1</td>
+<td>tc1中断信号</td>
+</tr>
+<tr>
+<td>output[5:0]</td>
+<td>HWInt</td>
+<td>中断信号</td>
+</tr>
+<tr>
+<td>……</td>
+<td>……</td>
+<td>……</td>
+</tr>
+</tbody></table>
+<p><strong>定义格式：</strong> 为了区分顶层端口和 cpu，若是 CPU 的数据则在前面加 cpu_ 以作区分</p>
+<p>可以看到，bridge为组合逻辑，除了简单的交换数据流，会涉及到 HWInt、访存地址分配</p>
+<p>注意：</p>
+<ol>
+<li>请根据提交要求部分仔细查看相关要求</li>
+<li>虽然中断发生器在顶层模块没有读入数据口，但是仍然要实现读取功能（我们规定读出的数据始终保持 0）</li>
+<li>Timer0 输出的中断信号接入 HWInt[0] (最低中断位)，Timer1 输出的中断信号接入 HWInt[1]，来自中断发生器的中断信号接入 HWInt[2]</li>
+</ol>
+<h3 id="CP0"><a href="#CP0" class="headerlink" title="CP0"></a>CP0</h3><p><strong>总要求</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">端口名</th>
+<th align="center">方向</th>
+<th align="center">位宽</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">clk</td>
+<td align="center">IN</td>
+<td align="center">1</td>
+<td align="left">时钟信号</td>
+</tr>
+<tr>
+<td align="left">reset</td>
+<td align="center">IN</td>
+<td align="center">1</td>
+<td align="left">同步复位信号</td>
+</tr>
+<tr>
+<td align="left">en</td>
+<td align="center">IN</td>
+<td align="center">1</td>
+<td align="left">写使能信号</td>
+</tr>
+<tr>
+<td align="left">CP0Add</td>
+<td align="center">IN</td>
+<td align="center">5</td>
+<td align="left">寄存器地址</td>
+</tr>
+<tr>
+<td align="left">CP0In</td>
+<td align="center">IN</td>
+<td align="center">32</td>
+<td align="left">CP0 写入数据</td>
+</tr>
+<tr>
+<td align="left">CP0Out</td>
+<td align="center">OUT</td>
+<td align="center">32</td>
+<td align="left">CP0 读出数据</td>
+</tr>
+<tr>
+<td align="left">VPC</td>
+<td align="center">IN</td>
+<td align="center">32</td>
+<td align="left">受害 PC</td>
+</tr>
+<tr>
+<td align="left">BDIn</td>
+<td align="center">IN</td>
+<td align="center">1</td>
+<td align="left">是否是延迟槽指令</td>
+</tr>
+<tr>
+<td align="left">ExcCodeIn</td>
+<td align="center">IN</td>
+<td align="center">5</td>
+<td align="left">记录异常类型</td>
+</tr>
+<tr>
+<td align="left">HWInt</td>
+<td align="center">IN</td>
+<td align="center">6</td>
+<td align="left">输入中断信号</td>
+</tr>
+<tr>
+<td align="left">EXLClr</td>
+<td align="center">IN</td>
+<td align="center">1</td>
+<td align="left">用来复位 EXL</td>
+</tr>
+<tr>
+<td align="left">EPCOut</td>
+<td align="center">OUT</td>
+<td align="center">32</td>
+<td align="left">EPC 的值</td>
+</tr>
+<tr>
+<td align="left">Req</td>
+<td align="center">OUT</td>
+<td align="center">1</td>
+<td align="left">进入处理程序请求</td>
+</tr>
+</tbody></table>
+<p>需要实现 SR、Casuse、EPC 三个 CP0 寄存器，会通过 <code>mfc0</code>/<code>mtc0</code> 和异常处理与外界交互</p>
+<p>注意：</p>
+<ol>
+<li>请根据提交要求部分仔细查看相关要求</li>
+<li>CP0 寄存器的初始值均为 0，<strong>未实现位始终保持 0</strong></li>
+<li>当进入中断或异常状态时，需将 EXL 置为 1；当退出中断或异常状态时，也需将 EXL 置为 0</li>
+<li>Cause_IP将会每个周期被修改一次，修改的内容来自计时器和外部中断</li>
+<li>测试程序保证不会写入 Cause，但可能写入 SR 和 EPC</li>
+</ol>
+<p><strong>1. SR（State Register）</strong></p>
+<p>功能：配置异常</p>
+<p>编号：12</p>
+<table>
+<thead>
+<tr>
+<th>格式</th>
+<th>15：10</th>
+<th>1</th>
+<th>0</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>域名</strong></td>
+<td>IM<br>（Interrupt Mask）</td>
+<td>EXL<br>（Exception Level）</td>
+<td>IE<br>（Interrupt Enable）</td>
+</tr>
+<tr>
+<td><strong>解释</strong></td>
+<td>外部中断使能（按HWInt位）</td>
+<td>发生中断异常时置位<br>并禁止中断异常</td>
+<td>全局中断使能</td>
+</tr>
+</tbody></table>
+<p><strong>2. Cause</strong></p>
+<p>功能：记录异常发生的原因和情况</p>
+<p>编号：13</p>
+<table>
+<thead>
+<tr>
+<th>格式</th>
+<th>31</th>
+<th>15：10</th>
+<th>6:2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>域名</strong></td>
+<td>BD<br>（Branch Delay）</td>
+<td>IP<br>（Interrupt Pending）</td>
+<td>ExcCode</td>
+</tr>
+<tr>
+<td><strong>解释</strong></td>
+<td>延迟槽标识</td>
+<td>中断来源</td>
+<td>异常编码</td>
+</tr>
+</tbody></table>
+<p><strong>3. EPC</strong></p>
+<p>功能：记录异常处理结束后需要返回的 PC</p>
+<p>编号：14</p>
+<p><strong>4. 外部信号处理</strong></p>
+<p>可以发现 CP0Out 和 EPCOut 都是简单的读出数据端口，只需要分析 Req 的实现</p>
+<div class="code-container" data-rel="Verilog"><figure class="iseeu highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">assign</span> Req = (~`EXL &amp;&amp; ((`IE &amp;&amp; (`IM &amp; HWInt)) || (ExcCodeIn)))</span><br><span class="line"></span><br><span class="line"><span class="keyword">assign</span> CP0Out = register[CP0Add];</span><br><span class="line">	</span><br><span class="line"><span class="keyword">assign</span> EPCOut = EPC;</span><br></pre></td></tr></table></figure></div>
+
+<p>首先 EXL 需为 0 ，也即当前未处于中断异常处理状态，然后分中断和异常两种即可</p>
+<p><strong>5. 内部寄存器逻辑</strong></p>
+<p>按照以下优先级进行：</p>
+<p>（1）reset 复位<br>（2）Req 中断异常请求<br>（3）写入寄存器、EXLClr</p>
+<p>注意：IP是每个周期被修改一次，EXLClr 原理上不会和 Req 、load 同时发生</p>
+<div class="code-container" data-rel="Verilog"><figure class="iseeu highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">always</span> @(<span class="keyword">posedge</span> clk) <span class="keyword">begin</span></span><br><span class="line">	<span class="keyword">if</span> (reset) <span class="keyword">begin</span></span><br><span class="line">		<span class="keyword">for</span> (i = <span class="number">0</span> ; i &lt; <span class="number">32</span> ; i = i + <span class="number">1</span>) <span class="keyword">begin</span></span><br><span class="line">			register[i] &lt;= <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">		<span class="keyword">if</span> (Req) <span class="keyword">begin</span></span><br><span class="line">			`EXL 		&lt;= <span class="number">1</span>;</span><br><span class="line">			`BD 		&lt;= BDIn;</span><br><span class="line">			`ExcCode	&lt;= (`IE &amp;&amp; (`IM &amp; HWInt)) ? <span class="number">0</span> : ExcCodeIn;</span><br><span class="line">			`EPC 		&lt;= (BDIn) ? (VPC - <span class="number">32'd4</span>) : VPC;</span><br><span class="line">		<span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span></span><br><span class="line">			<span class="keyword">if</span> (EXLClr) <span class="keyword">begin</span></span><br><span class="line">				`EXL &lt;= <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			<span class="keyword">if</span> (en) <span class="keyword">begin</span></span><br><span class="line">				register[CP0Add] &lt;= load;</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">		`IP &lt;= HWInt;</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></div>
+
+<p><strong>6. 添加mfc0、mtc0</strong></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="/../img/mfc0.png" alt="mfc0"></p>
+<p><img lazyload="" src="/images/loading.svg" data-src="/../img/mtc0.png" alt="mtc0"></p>
+<p>这里尤其需要注意格式</p>
+<h3 id="中断异常响应机制"><a href="#中断异常响应机制" class="headerlink" title="中断异常响应机制"></a>中断异常响应机制</h3><p><a href="#%E5%BC%82%E5%B8%B8%E7%A0%81">异常码</a></p>
+<p>注意：</p>
+<ol>
+<li>分支跳转指令无论跳转与否，延迟槽指令为受害指令时 BD 均需要置位</li>
+<li>发生取指异常或 RI 异常后视为 nop 直至提交到 CP0</li>
+<li>跳转到不对齐的地址时，需要向 EPC 写入不对齐的地址</li>
+<li>对于未知指令的判断<strong>仅需考虑 opcode（和 R 型指令的 funct）</strong>，且仅需判断是否出现在 <strong>P7 要求的指令集</strong>中，同时保证未知指令的测试用例中 opcode 和 funct 码的组合<strong>一定没有在 MARS 的基本指令集中出现</strong>。</li>
+<li>异常信号 ExcCode 应该流水到 CP0 所在的流水级，而不能直接提交到 CP0</li>
+</ol>
+<p>我们将 CP0 设置在 M 级</p>
+<p>注意：如果拖到 M 级判断地址是否非法，需要进行调整防止异常指令修改外设</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>可能发生的异常</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>F</td>
+<td>取指异常(4)</td>
+</tr>
+<tr>
+<td>D</td>
+<td>系统调用(8),未知指令(10)</td>
+</tr>
+<tr>
+<td>E</td>
+<td>取数异常(4,计算地址时加法溢出)<br>取数异常(4,地址非法)<br>存数异常(5,计算地址时加法溢出)<br>存数异常(5,地址非法)<br>溢出异常(12)</td>
+</tr>
+<tr>
+<td>M</td>
+<td></td>
+</tr>
+<tr>
+<td>W</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="测试方案"><a href="#测试方案" class="headerlink" title="测试方案"></a>测试方案</h2><h2 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h2><h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><h3 id="异常码"><a href="#异常码" class="headerlink" title="异常码"></a>异常码</h3><table>
+<thead>
+<tr>
+<th align="center">异常码</th>
+<th align="left">助记符与名称</th>
+<th align="left">指令</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>0</strong></td>
+<td align="left"><strong>Int</strong><br>（外部中断）</td>
+<td align="left">所有指令</td>
+<td align="left">中断请求，来源于计时器与外部中断</td>
+</tr>
+<tr>
+<td align="center"><strong>4</strong></td>
+<td align="left"><strong>AdEL</strong><br>（取指异常）</td>
+<td align="left">所有指令</td>
+<td align="left">PC 地址未字对齐<br>PC 地址超过 0x3000 ~ 0x6ffc</td>
+</tr>
+<tr>
+<td align="center"><strong>4</strong></td>
+<td align="left"><strong>AdEL</strong><br>（取数异常）</td>
+<td align="left">lw</td>
+<td align="left">取数地址未与 4 字节对齐</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="left"></td>
+<td align="left">lh</td>
+<td align="left">取数地址未与 2 字节对齐</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="left"></td>
+<td align="left">lh, lb</td>
+<td align="left">取 Timer 寄存器的值</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="left"></td>
+<td align="left">load 型指令</td>
+<td align="left">计算地址时加法溢出</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="left"></td>
+<td align="left">load 型指令</td>
+<td align="left">取数地址超出 DM、Timer0、Timer1、中断发生器的范围</td>
+</tr>
+<tr>
+<td align="center"><strong>5</strong></td>
+<td align="left"><strong>AdES</strong><br>（存数异常）</td>
+<td align="left">sw</td>
+<td align="left">存数地址未 4 字节对齐</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="left"></td>
+<td align="left">sh</td>
+<td align="left">存数地址未 2 字节对齐</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="left"></td>
+<td align="left">sh, sb</td>
+<td align="left">存 Timer 寄存器的值</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="left"></td>
+<td align="left">store 型指令</td>
+<td align="left">计算地址加法溢出</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="left"></td>
+<td align="left">store 型指令</td>
+<td align="left">向计时器的 Count 寄存器存值</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="left"></td>
+<td align="left">store 型指令</td>
+<td align="left">存数地址超出 DM、Timer0、Timer1、中断发生器的范围</td>
+</tr>
+<tr>
+<td align="center"><strong>8</strong></td>
+<td align="left"><strong>Syscall</strong><br>（系统调用）</td>
+<td align="left">syscall</td>
+<td align="left">系统调用</td>
+</tr>
+<tr>
+<td align="center"><strong>10</strong></td>
+<td align="left"><strong>RI</strong><br>（未知指令）</td>
+<td align="left">-</td>
+<td align="left">未知的指令码</td>
+</tr>
+<tr>
+<td align="center"><strong>12</strong></td>
+<td align="left"><strong>Ov</strong><br>（溢出异常）</td>
+<td align="left">add, addi, sub</td>
+<td align="left">算术溢出</td>
+</tr>
+</tbody></table>
+
 		</div>
 
 		
@@ -738,7 +1195,7 @@ mjx-container[display="true"] + br {
         
             <li>
                 <strong>Updated at
-                    :</strong> 2025-12-02 10:13:52
+                    :</strong> 2025-12-06 23:19:39
             </li>
         
         <li>
@@ -858,7 +1315,7 @@ mjx-container[display="true"] + br {
 	<div class="post-toc">
 		<div class="toc-title">On this page</div>
 		<div class="page-title">计组P7——流水线CPU（复杂指令集&amp;支持异常处理）</div>
-		
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E8%8D%89%E7%A8%BF"><span class="nav-text">设计草稿</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E6%97%B6%E5%99%A8tc"><span class="nav-text">计时器tc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E6%A1%A5bridge"><span class="nav-text">系统桥bridge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CP0"><span class="nav-text">CP0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%AD%E5%BC%82%E5%B8%B8%E5%93%8D%E5%BA%94%E6%9C%BA%E5%88%B6"><span class="nav-text">中断异常响应机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%96%B9%E6%A1%88"><span class="nav-text">测试方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98"><span class="nav-text">思考题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E7%A0%81"><span class="nav-text">异常码</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -889,7 +1346,7 @@ mjx-container[display="true"] + br {
                     </span>
                     
                         <span>
-                            21.4k words in total
+                            23.5k words in total
                         </span>
                     
                 </p>
