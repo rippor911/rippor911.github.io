@@ -78,7 +78,7 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/categories/co/"/>
+    <link rel="canonical" href="http://example.com/2026/04/04/oo/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
@@ -86,13 +86,15 @@
     
         
         <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/categories/CO/index.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OO">
+<meta property="og:url" content="http://example.com/2026/04/04/OO/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/images/redefine-og.webp">
+<meta property="article:published_time" content="2026-04-04T11:09:01.000Z">
+<meta property="article:modified_time" content="2026-04-04T12:40:14.000Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/images/redefine-og.webp">
@@ -107,7 +109,7 @@
     
     <title>
         
-            Category: CO | Adventure
+            OO | Adventure
         
     </title>
 
@@ -465,162 +467,257 @@
 			
 
 			<div class="main-content">
-				<div class="page-template-container">
-	
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
 
-	
-	<div class="category-name">
-    <i class="fa-solid fa-folder"></i>&nbsp;CO
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">OO</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] shrink-0 rounded-medium border border-border-color p-px">
+				<img src="/img/rippor.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">rippor</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">null</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2026-04-04 19:09:01</span>
+        <span class="mobile">2026-04-04 19:09:01</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2026-04-04 20:40:14</span>
+            <span class="mobile">2026-04-04 20:40:14</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.1k Words</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>4 Mins</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
 </div>
-<div class="category-post-list">
-    
-<div class="archive-list-container">
-    
-        <section class="archive-item mb-spacing-unit last:mb-0">
-            <div class="archive-item-header flex flex-row items-center mb-2">
-                <span class="archive-year font-semibold text-3xl mr-2">2025</span>
-                <span class="archive-year-post-count text-xs md:text-sm font-bold rounded-small bg-third-background-color py-[2px] px-[10px] border border-border-color">10</span>
-            </div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<p>本文旨在记录 <strong>OO （面向对象设计与构造）</strong> 正课的架构建筑与易错点，可供参考学习。</p>
+<h2 id="Unit1-表达式解析"><a href="#Unit1-表达式解析" class="headerlink" title="Unit1 表达式解析"></a>Unit1 表达式解析</h2><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../img/U1%E6%9C%80%E7%BB%88.png"
+                      alt="U1最终"
+                ></p>
+<p><strong>核心思想：</strong> $Ans &#x3D; \Sigma c * exp(Poly) *  x^a * y^b $</p>
+<p><strong>优点：</strong> 职责清晰，实现简单，合并同类项顺理成章</p>
+<p><strong>缺点：</strong> 上帝类（Poly）管太多，维护困难</p>
+<blockquote>
+<p>[!note] 递归下降解析<br>初学递归会理解困难，只需要记得按照 Expr-Term-Factor(-Expr-……)的层级，解析某一层只从本层考虑下一层即可</p>
+</blockquote>
+<blockquote>
+<p>[!warning] 易错点</p>
+<ol>
+<li>互测香饽饽是选择式因子（[(A&#x3D;&#x3D;B)?C:D]，假如 A &#x3D;&#x3D; B成立则 cost(D)不计算，反之 cost(C) 不计算），所有操作（包括化简、函数调用）如果图方便直接进行，不跳过选择式因子的话会吃大亏（TLE）</li>
+<li>简单性能优化：正项提前、省略 1（exp(0)）、省略 0 、exp内不要加多余的括号</li>
+<li>不要为了性能优化牺牲正确性，即使强测有可能测不出来</li>
+</ol>
+</blockquote>
+<p><strong>关于exp主动提因子优化策略的推导（参考lrz思路）：</strong></p>
+<p>一般都认为提最大公因数会最短，事实上并不一定，例如：</p>
+<div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">exp((240+360*x))    # 简单合并</span><br><span class="line">exp((4+6*x))^60     # 实际最短</span><br><span class="line">exp((2+3*x))^120    # gcd策略</span><br></pre></td></tr></table></figure></div>
+
+<p><strong>引理:</strong><br>对于任意<strong>自然数</strong> (a)，有<br>$$\operatorname{ndigits}(a) &#x3D;<br>\begin{cases}<br>1, &amp; a&#x3D;0 \[4pt]<br>\left\lfloor \log_{10}a \right\rfloor + 1, &amp; a ＞ 0<br>\end{cases}$$<br>其中，$\operatorname{ndigits}(a)$ 表示 $a$ 在十进制表示下所占位数</p>
+<p>设 $F(d)$ 表示多项式 $p$ 除去因数 $d$ 后所占字符数，对一正整数 $d (d &lt; p$的最小常数因子$)$ ，有（以下 $n$ 为多项式 $p$ 的项数）：</p>
+<p>$$<br>\begin{aligned}<br>F(d) - F(\frac{d}{k}) &amp;&#x3D; \Sigma^n_{i&#x3D;1}(\left\lfloor \log_{10}\frac{a_i}{d} \right\rfloor - \left\lfloor \log_{10}\frac{a_i}{\frac{d}{k}} \right\rfloor) + \left\lfloor \log_{10}d \right\rfloor - \left\lfloor \log_{10}{\frac{d}{k}} \right\rfloor \<br>&amp;\le     \Sigma^n_{i&#x3D;1}(- \left\lfloor \log_{10}k \right\rfloor) + \left\lceil \log_{10}k \right\rceil \<br>&amp;&#x3D;-n \left\lfloor \log_{10}k \right\rfloor + \left\lceil \log_{10}k \right\rceil \<br>&amp;\le -n \left\lfloor \log_{10}k \right\rfloor + \left\lfloor\log_{10}k \right\rfloor + 1\<br>&amp;&#x3D; (1-n) \left\lfloor \log_{10}k \right\rfloor + 1<br>\end{aligned}<br>$$</p>
+<p>对于$k ≥ 10$，有 $F(d)-F(\frac{d}{k}) \le 2 - n$</p>
+<p>$n ≤ 1$ 时，没有公因数的说法，直接提出来唯一的因数即可（除非只有一个单独的常数，此时提出来反而会多）</p>
+<p>$n ≥ 2$ 时，提最大公因数总是最优的</p>
+<p>但是 $k &lt; 10$ 怎么办呢？比较简单的思路就是枚举这 $9$ 个 $k$ 选个最短的，反正也不多，不过还可以精益求精：</p>
+<p>$$<br>\begin{aligned}<br>F(d) - F(\frac{d}{k}) &amp;&#x3D;(\operatorname{ndigits}(d)- \operatorname{ndigits}(\frac{d}{k})) +  \Sigma^n_{i&#x3D;1}(\operatorname{ndigits}(\frac{a_i}{d})- \operatorname{ndigits}(\frac{a_i}{\frac{d}{k}}))\<br>&amp;&#x3D;\delta_{out} + \Sigma_{i&#x3D;1}^n \delta_{in}^{(i)}<br>\end{aligned}<br>$$</p>
+<p>由于 $k ＜ 10$，$\delta_{out} ≤ 1$, 所以当且仅当 $\delta_{out} &#x3D; 1$ 且 $\Sigma_{i&#x3D;1}^n \delta_{in}^{(i)} &#x3D; 0$ 时，$F(d)-F(\frac{d}{k}) ＞ 0$（注意 $\delta_{in}^{(i)} ≤ 0$），也就是说，在这种情况下，提 $\frac{d}{k}$ 会比提 $d$ 好</p>
+<p>事实上，由于条件苛刻，直接用 gcd 策略貌似也不会损失太多，而且这种方法也并不比直接枚举快多少，当然考虑到嵌套的情况，直接枚举还是有可能被卡超时</p>
+<p><strong>乘开优化：</strong> 意思是把 $exp((a+b))$ 拆成$exp(a)*exp(b)$再加上之前的优化可能更好（公因数可能会提得更大），不过太复杂，这里不做研究，仅提供一个小例。</p>
+<div class="code-container" data-rel="Text"><figure class="iseeu highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">exp((13000000*x*y+34000002*x^2+26000000*x+17000001*y))</span><br><span class="line">exp((x*y+2*x))^13000000*exp((2*x^2+y))^17000001</span><br></pre></td></tr></table></figure></div>
+
+<p>这种数据的思路是分开之后提出来的指数尽可能大（或者指数项很多），节省的字符长度能够抵消*exp()带来的大消耗</p>
+<h2 id="Unit2-电梯"><a href="#Unit2-电梯" class="headerlink" title="Unit2 电梯"></a>Unit2 电梯</h2><blockquote>
+<p>乘客们或许会抱怨电梯将他们提前赶出，或许会惊叹双轿厢换乘的便捷，但不会知道屏幕前的你在一个个日夜深耕电梯系统的技术研发、对着bug的输出日志焦头烂额、看着一个个绿色方块欣喜若狂的日子。</p>
+</blockquote>
+<link rel="stylesheet" href="/css/folder.css" type="text/css"><script src="/js/folder.js" type="text/javascript" async></script>
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> OO</li>
+        <li><strong>Author:</strong> rippor</li>
+        <li><strong>Created at
+                :</strong> 2026-04-04 19:09:01</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2026-04-04 20:40:14
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://redefine.ohevan.com/2026/04/04/OO/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
             
-            <ul class="article-list pl-0 md:pl-8 text-lg leading-[1.5]">
-                
-                    
-                    
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='12-02'>
-                    
-                    <a href="/2025/12/02/CO/" class="block w-fit">
-                        <span class="article-title my-0.5 text-2xl">计组理论</span>
-                    </a>
-                    
-                
-                    
-                    
-                    <a href="/2025/12/02/COP7/" class="block w-fit">
-                        <span class="article-title my-0.5 text-2xl">计组P7——流水线CPU（复杂指令集&amp;支持异常处理）</span>
-                    </a>
-                    
-                
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='11-20'>
-                    
-                    <a href="/2025/11/20/COP6/" class="block w-fit">
-                        <span class="article-title my-0.5 text-2xl">计组P6——流水线CPU（复杂指令集）</span>
-                    </a>
-                    
-                
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='11-10'>
-                    
-                    <a href="/2025/11/10/COP5/" class="block w-fit">
-                        <span class="article-title my-0.5 text-2xl">计组P5——流水线CPU（简化指令集）</span>
-                    </a>
-                    
-                
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='11-05'>
-                    
-                    <a href="/2025/11/05/COP4/" class="block w-fit">
-                        <span class="article-title my-0.5 text-2xl">计组P4——单周期CPU的verilog实现</span>
-                    </a>
-                    
-                
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='10-28'>
-                    
-                    <a href="/2025/10/28/COP3/" class="block w-fit">
-                        <span class="article-title my-0.5 text-2xl">计组P3——单周期CPULogisim实现</span>
-                    </a>
-                    
-                
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='10-21'>
-                    
-                    <a href="/2025/10/21/COP2/" class="block w-fit">
-                        <span class="article-title my-0.5 text-2xl">计组P2——学会当好的编译器</span>
-                    </a>
-                    
-                
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='10-14'>
-                    
-                    <a href="/2025/10/14/COP1/" class="block w-fit">
-                        <span class="article-title my-0.5 text-2xl">计组P1——Verilog 和 状态机</span>
-                    </a>
-                    
-                
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='09-30'>
-                    
-                    <a href="/2025/09/30/COP0/" class="block w-fit">
-                        <span class="article-title my-0.5 text-2xl">计组P0——Logisim 和 状态机</span>
-                    </a>
-                    
-                
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is='09-26'>
-                    
-                    <a href="/2025/09/26/COPre/" class="block w-fit">
-                        <span class="article-title my-0.5 text-2xl">计组Pre</span>
-                    </a>
-                    
-                
-                </li> <!-- Ensure the last item is properly closed -->
-            </ul>
-        </section>
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2025/12/02/CO/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">计组理论</span>
+						<span class="post-nav-item">Next posts</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+		<div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+			<div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.js';
+
+      (function() {
+        const startPath = location.pathname;
+        const startTime = Date.now();
+        const retryDelay = 200;
+        const retryLimit = 5000;
+
+        const runWaline = () => {
+          if (location.pathname !== startPath) {
+            return;
+          }
+
+          const container = document.getElementById('waline');
+          if (!container) {
+            if (Date.now() - startTime < retryLimit) {
+              setTimeout(runWaline, retryDelay);
+            }
+            return;
+          }
+
+          if (window.redefineWalineInstance?.destroy) {
+            window.redefineWalineInstance.destroy();
+          }
+
+          container.innerHTML = '';
+          window.redefineWalineInstance = init({
+            el: '#waline',
+            serverURL: 'https://example.example.com',
+            path: location.pathname,
+            dark: 'body[class~="dark-mode"]',
+            reaction: false,
+            requiredMeta: ['nick', 'mail'],
+            emoji: [],
+                      lang: 'zh-CN',
+          });
+        };
+
+        runWaline();
+      })();
+    </script>
+
+
+
+        
     
 </div>
-</div>
+
+		</div>
+		
+	</div>
 
 	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">On this page</div>
+		<div class="page-title">OO</div>
+		<ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Unit1-%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%A7%A3%E6%9E%90"><span class="nav-text">Unit1 表达式解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unit2-%E7%94%B5%E6%A2%AF"><span class="nav-text">Unit2 电梯</span></a></li></ol>
 
-	<div class="page-template-content markdown-body">
-		
-
-		
-	</div>
-
-	<div class="page-template-comments">
-		
 	</div>
 </div>
-
-<div class="paginator">
-	<span class="page-number current">1</span>
+	</div>
+	
 </div>
-  
+
 			</div>
 
 			
@@ -702,6 +799,26 @@
 		</div>
 	</div>
 
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+		<li class="go-comment">
+			<i class="fa-regular fa-comments"></i>
+		</li>
+		
+	</ul>
+</div>
+	</div>
 	
 
 	<div class="right-side-tools-container">
@@ -847,6 +964,7 @@
         }),
     );
 </script>
+
 
 
 
